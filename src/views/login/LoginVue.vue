@@ -65,6 +65,7 @@ const onSubmit = () => {
       ElMessage({
         message: res.data.msg,
         type: "success",
+        duration: 1000,
       });
       setTimeout(() => {
         router.push({ path: "/admin_index" });
@@ -75,6 +76,7 @@ const onSubmit = () => {
       ElMessage({
         message: res.data.msg,
         type: "success",
+        duration: 1000,
       });
       setTimeout(() => {
         router.push({ path: "/index" });
@@ -85,6 +87,7 @@ const onSubmit = () => {
       ElMessage({
         message: res.data.msg,
         type: "warning",
+        duration: 1000,
       });
     }
   });

@@ -22,3 +22,14 @@ export function RegisterApi(params: object) {
         params,
     })
 }
+/* 
+*发送验证码
+*params：{email}
+*/
+export function SendCodeApi(params: object) {
+    return request({
+        url: base.send_code,
+        method: "post",
+        params,
+    })
+}

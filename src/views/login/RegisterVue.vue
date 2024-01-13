@@ -28,7 +28,7 @@
               type="default"
               class="code_btn"
               :disabled="isButtonDisabled"
-              @click="startCountDown"
+              @click="sendCode"
               >{{ buttonLabel }}</el-button
             >
           </el-form-item>
@@ -71,9 +71,10 @@
 
 <script lang="ts" setup>
 import { ref } from "vue";
-import { RegisterApi } from "@/api/login";
+import { RegisterApi, SendCodeApi } from "@/api/login";
 import { ElMessage } from "element-plus";
 import { useRouter } from "vue-router";
+
 const router = useRouter();
 const RegisterForm = ref({
   Username: "",
@@ -90,7 +91,7 @@ const startCountDown = () => {
   const updateCountdown = () => {
     if (countdownTime === 0) {
       isButtonDisabled.value = false;
-      buttonLabel.value = "发送验证码";
+      buttonLabel.value = "Send Code";
     } else {
       buttonLabel.value = `Try again after  ${countdownTime} s`;
       countdownTime--;
@@ -100,6 +101,27 @@ const startCountDown = () => {
   updateCountdown();
 };
 
+const sendCode = () => {
+  SendCodeApi({ Username: RegisterForm.value.Username }).then((res) => {
+    console.log(res)
+    if (res.data.code == "1") {
+      ElMessage({
+        message: res.data.msg,
+        type: "success",
+        duration: 1000,
+      });
+      startCountDown();
+    }
+    if (res.data.code == "0") {
+      ElMessage({
+        message: res.data.msg,
+        type: "warning",
+        duration: 1000,
+      });
+    }
+  });
+};
+
 const onSubmit = () => {
   console.log(RegisterForm);
   RegisterApi(RegisterForm.value).then((res) => {
@@ -107,6 +129,7 @@ const onSubmit = () => {
       ElMessage({
         message: res.data.msg,
         type: "success",
+        duration: 1000,
       });
       setTimeout(() => {
         router.push({ path: "/login" });
@@ -117,6 +140,7 @@ const onSubmit = () => {
       ElMessage({
         message: res.data.msg,
         type: "warning",
+        duration: 1000,
       });
     }
   });

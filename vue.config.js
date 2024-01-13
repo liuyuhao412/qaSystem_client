@@ -11,16 +11,17 @@ module.exports = defineConfig({
     })
   },
   transpileDependencies: true,
-  // devServer: {
-  //   open: true,
-  //   port: 8081,
-  //   proxy: {
-  //     // 匹配所有以 '/api'开头的请求路径
-  //     "/api": {
-  //       target: "http://127.0.0.1:5000", // 代理目标的基础路径
-  //       changeOrigin: true,
-  //       pathRewrite: { "^/api": "" },
-  //     },
-  //   },
-  // },
+  devServer: {
+    
+    open: true,
+    port: 8081,
+    proxy: {
+      // 匹配所有以 '/api'开头的请求路径
+      "/api": {
+        target: "http://127.0.0.1:5000", // 代理目标的基础路径
+        changeOrigin: true,
+        pathRewrite: { "^/api": "" },
+      },
+    },
+  },
 })

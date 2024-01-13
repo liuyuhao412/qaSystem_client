@@ -70,12 +70,16 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from "vue";
-const RegisterForm = reactive({
+import { ref } from "vue";
+import { RegisterApi } from "@/api/login";
+import { ElMessage } from "element-plus";
+import { useRouter } from "vue-router";
+const router = useRouter();
+const RegisterForm = ref({
   Username: "",
-  Code:"",
+  Code: "",
   Password: "",
-  ConfirmePassword:""
+  ConfirmePassword: "",
 });
 const isButtonDisabled = ref(false);
 const buttonLabel = ref("Send Code");
@@ -97,8 +101,25 @@ const startCountDown = () => {
 };
 
 const onSubmit = () => {
-  console.log("register success!");
-  console.log(RegisterForm)
+  console.log(RegisterForm);
+  RegisterApi(RegisterForm.value).then((res) => {
+    if (res.data.code == "1") {
+      ElMessage({
+        message: res.data.msg,
+        type: "success",
+      });
+      setTimeout(() => {
+        router.push({ path: "/login" });
+      }, 1500);
+    }
+    /*登录失败*/
+    if (res.data.code == "0") {
+      ElMessage({
+        message: res.data.msg,
+        type: "warning",
+      });
+    }
+  });
 };
 </script>
 
@@ -165,6 +186,9 @@ span {
   color: #333;
   font-size: 15px;
   margin: 0 0;
+}
+.msg a {
+  color: rgb(79, 65, 92);
 }
 .register_btn {
   width: 160px;

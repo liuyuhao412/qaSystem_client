@@ -48,14 +48,46 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive } from "vue";
-const LoginForm = reactive({
+import { ref } from "vue";
+import { LoginApi } from "@/api/login";
+import { ElMessage } from "element-plus";
+import { useRouter } from "vue-router";
+const router = useRouter();
+const LoginForm = ref({
   Username: "",
   Password: "",
 });
 
 const onSubmit = () => {
-  console.log("login success!");
+  LoginApi(LoginForm.value).then((res: any) => {
+    /*管理员*/
+    if (res.data.code == "2") {
+      ElMessage({
+        message: res.data.msg,
+        type: "success",
+      });
+      setTimeout(() => {
+        router.push({ path: "/admin_index" });
+      }, 1500);
+    }
+    /*用户*/
+    if (res.data.code == "1") {
+      ElMessage({
+        message: res.data.msg,
+        type: "success",
+      });
+      setTimeout(() => {
+        router.push({ path: "/index" });
+      }, 1500);
+    }
+    /*登录失败*/
+    if (res.data.code == "0") {
+      ElMessage({
+        message: res.data.msg,
+        type: "warning",
+      });
+    }
+  });
 };
 </script>
 
@@ -111,6 +143,9 @@ span {
   color: #333;
   font-size: 15px;
   margin: 0 0;
+}
+.msg a {
+  color: rgb(79, 65, 92);
 }
 .login_btn {
   width: 160px;

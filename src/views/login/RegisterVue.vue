@@ -140,7 +140,7 @@ const onSubmit = () => {
       ElMessage({
         message: res.data.msg,
         type: "warning",
-        duration: 1000,
+        duration: 2000,
       });
     }
   });

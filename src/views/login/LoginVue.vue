@@ -9,7 +9,7 @@
           <el-form-item>
             <el-input
               v-model="LoginForm.Username"
-              placeholder="Username"
+              placeholder="Username/email"
               class="input_box"
             />
             <template #label>

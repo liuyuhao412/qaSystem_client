@@ -6,7 +6,9 @@
         placeholder="请输入用户"
         class="log_input"
       />
-      <el-button type="primary" class="log_btn">查询</el-button>
+      <el-button type="primary" class="log_btn" @click="search_log"
+        >查询</el-button
+      >
     </div>
     <div class="log_table">
       <el-table :data="LogTableData" style="width: 750px" border>
@@ -42,38 +44,68 @@ const pageSize = ref(5);
 const total = ref(1);
 
 const loadTableData = async () => {
-  GetLogApi({ page: currentPage.value, limit: pageSize.value }).then((res) => {
-    if (res.data.code == 1) {
-      LogTableData.value = res.data.data;
-      total.value = res.data.count;
-    } else {
-      LogTableData.value = [];
-    }
+  GetLogApi({
+    page: currentPage.value,
+    limit: pageSize.value,
+  }).then((res) => {
+    LogTableData.value = res.data.data;
+    total.value = res.data.count;
   });
 };
 onMounted(loadTableData);
 
-const handleSizeChange = (val: number) => {
-  GetLogApi({ page: currentPage.value, limit: val }).then((res) => {
-    if (res.data.code == 1) {
-      LogTableData.value = res.data.data;
-      total.value = res.data.count;
-    } else {
-      LogTableData.value = [];
-    }
-  });
-};
-const handleCurrentChange = (val: number) => {
-  GetLogApi({ page: val, limit: pageSize.value }).then((res) => {
-    if (res.data.code == 1) {
-      LogTableData.value = res.data.data;
-      total.value = res.data.count;
-    } else {
-      LogTableData.value = [];
-    }
+const search_log = async () => {
+  GetLogApi({
+    page: currentPage.value,
+    limit: pageSize.value,
+    username: log_username.value,
+  }).then((res) => {
+    LogTableData.value = res.data.data;
+    total.value = res.data.count;
   });
 };
 
+const handleSizeChange = async (val: number) => {
+  if (log_username.value == "") {
+    GetLogApi({
+      page: currentPage.value,
+      limit: val,
+    }).then((res) => {
+      LogTableData.value = res.data.data;
+      total.value = res.data.count;
+    });
+  } else {
+    GetLogApi({
+      page: currentPage.value,
+      limit: val,
+      username: log_username.value,
+    }).then((res) => {
+      LogTableData.value = res.data.data;
+      total.value = res.data.count;
+    });
+  }
+};
+
+const handleCurrentChange = async (val: number) => {
+  if (log_username.value == "") {
+    GetLogApi({
+      page: val,
+      limit: pageSize.value,
+    }).then((res) => {
+      LogTableData.value = res.data.data;
+      total.value = res.data.count;
+    });
+  } else {
+    GetLogApi({
+      page: val,
+      limit: pageSize.value,
+      username: log_username.value,
+    }).then((res) => {
+      LogTableData.value = res.data.data;
+      total.value = res.data.count;
+    });
+  }
+};
 </script>
 
 <style scoped>
@@ -94,6 +126,7 @@ const handleCurrentChange = (val: number) => {
   height: 40px;
   width: 100px;
   margin-top: 10px;
+  font-size: 15px;
 }
 .log_table {
   margin-top: 10px;

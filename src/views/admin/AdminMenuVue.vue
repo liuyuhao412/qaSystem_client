@@ -44,6 +44,7 @@ h5 {
   text-align: center;
   margin-top:15px;
   margin-bottom: 15px;
+  color:#fff;
 }
 .item{
   width:200px;

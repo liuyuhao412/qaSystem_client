@@ -5,7 +5,6 @@
         v-model="log_username"
         placeholder="请输入用户"
         class="log_input"
-        @click="searchLog"
       />
       <el-button type="primary" class="log_btn">查询</el-button>
     </div>

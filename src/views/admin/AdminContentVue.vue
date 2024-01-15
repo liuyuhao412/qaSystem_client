@@ -68,7 +68,7 @@ const exit = () => {
 }
 .bottom {
   height: 20px;
-  padding-left: 60px;
+  padding-left: 20px;
   padding-bottom: 5px;
   position: fixed;
   bottom: 0;

@@ -9,23 +9,23 @@
       active-text-color="#ffd04b"
       router
     >
-      <el-menu-item class="item" index="">
+      <el-menu-item class="item" index="/admin_home">
         <span class="iconfont">&#xe751;</span>
         <span>首页</span>
       </el-menu-item>
-      <el-menu-item class="item" index="">
+      <el-menu-item class="item" index="/admin_user">
         <span class="iconfont">&#xe62d;</span>
         <span>用户管理</span>
       </el-menu-item>
-      <el-menu-item class="item" index="">
+      <el-menu-item class="item" index="/admin_log">
         <span class="iconfont">&#xea45;</span>
         <span>登录日志管理</span>
       </el-menu-item>
-      <el-menu-item class="item" index="">
+      <el-menu-item class="item" index="/admin_code">
         <span class="iconfont">&#xe624;</span>
         <span>验证码管理</span>
       </el-menu-item>
-      <el-menu-item class="item" index="">
+      <el-menu-item class="item" index="/admin_model">
         <span class="iconfont">&#xe60f;</span>
         <span>模型配置</span>
       </el-menu-item>

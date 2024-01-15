@@ -24,3 +24,23 @@
 .icon-mima:before {
   content: "\e6b2";
 }
+
+.icon-yanzhengyanzhengma:before {
+  content: "\e624";
+}
+
+.icon-shouye:before {
+  content: "\e751";
+}
+
+.icon-moxingguanli:before {
+  content: "\e60f";
+}
+
+.icon-yonghuguanli_huaban:before {
+  content: "\e62d";
+}
+
+.icon-guanlidenglurizhi:before {
+  content: "\ea45";
+}

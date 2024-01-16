@@ -6,6 +6,7 @@
         placeholder="请输入用户"
         class="log_input"
       />
+      <el-input v-model="log_role" placeholder="请输入角色" class="log_input" />
       <el-button type="primary" class="log_btn" @click="search_log"
         >查询</el-button
       >
@@ -39,6 +40,7 @@
 import { GetLogApi } from "@/api/admin";
 import { ref, onMounted } from "vue";
 const log_username = ref("");
+const log_role = ref("");
 const logTableData = ref([]);
 const currentPage = ref(1);
 const pageSize = ref(5);
@@ -60,6 +62,7 @@ const search_log = async () => {
     page: currentPage.value,
     limit: pageSize.value,
     username: log_username.value,
+    role: log_role.value,
   }).then((res) => {
     logTableData.value = res.data.data;
     total.value = res.data.count;
@@ -67,7 +70,7 @@ const search_log = async () => {
 };
 
 const handleSizeChange = async (val: number) => {
-  if (log_username.value == "") {
+  if (log_username.value == "" && log_role.value == "") {
     GetLogApi({
       page: currentPage.value,
       limit: val,
@@ -80,6 +83,7 @@ const handleSizeChange = async (val: number) => {
       page: currentPage.value,
       limit: val,
       username: log_username.value,
+      role: log_role.value,
     }).then((res) => {
       logTableData.value = res.data.data;
       total.value = res.data.count;
@@ -88,7 +92,7 @@ const handleSizeChange = async (val: number) => {
 };
 
 const handleCurrentChange = async (val: number) => {
-  if (log_username.value == "") {
+  if (log_username.value == "" && log_role.value == "") {
     GetLogApi({
       page: val,
       limit: pageSize.value,
@@ -101,6 +105,7 @@ const handleCurrentChange = async (val: number) => {
       page: val,
       limit: pageSize.value,
       username: log_username.value,
+      role: log_role.value,
     }).then((res) => {
       logTableData.value = res.data.data;
       total.value = res.data.count;

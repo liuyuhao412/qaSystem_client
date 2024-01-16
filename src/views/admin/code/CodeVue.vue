@@ -11,13 +11,13 @@
       >
     </div>
     <div class="code_table">
-      <el-table :data="codeTableData" style="width: 1100px" border>
+      <el-table :data="codeTableData" style="width: 1000px" border>
         <el-table-column prop="id" label="序号" width="80px" />
         <el-table-column prop="email" label="邮箱" width="200px" />
-        <el-table-column prop="code" label="验证码" width="220px" />
+        <el-table-column prop="code" label="验证码" width="120px" />
         <el-table-column prop="is_valid" label="验证码状态" width="100px" />
-        <el-table-column prop="created_time" label="登录时间" width="250px" />
-        <el-table-column prop="expiration_time" label="登录时间" width="250px" />
+        <el-table-column prop="created_time" label="创建时间" width="250px" />
+        <el-table-column prop="expiration_time" label="过期时间" width="250px" />
       </el-table>
     </div>
     <div class="code_page">

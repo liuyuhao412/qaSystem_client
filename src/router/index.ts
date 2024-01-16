@@ -18,7 +18,39 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/index',
     name: 'index',
-    component: () => import("@/views/user/UserIndexVue.vue")
+    component: () => import("@/views/user/UserIndexVue.vue"),
+    children: [
+      {
+        path: '/index',
+        redirect: '/user_home'
+      },
+      {
+        path: "/user_home",
+        name: "user_home",
+        component: () => import("@/views/user/home/HomeVue.vue"),
+      },
+      {
+        path: "/user_knowledge",
+        name: "user_knowledge",
+        component: () => import("@/views/user/knowledge/KnowledgeIndexVue.vue"),
+      },
+      {
+        path: "/user_view",
+        name: "user_view",
+        component: () => import("@/views/user/qaview/IndexVue.vue"),
+      }, 
+      {
+        path: "/user_history",
+        name: "user_history",
+        component: () => import("@/views/user/history/HistoryIndexVue.vue"),
+      },
+      {
+        path: "/user_setting",
+        name: "user_setting",
+        component: () => import("@/views/user/setting/SettingVue.vue"),
+      },
+
+    ]
   },
   {
     path: '/admin_index',
@@ -64,7 +96,7 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  const token:string | null = localStorage.getItem('token');
+  const token: string | null = localStorage.getItem('token');
 
   // 如果路由需要登录验证，并且用户未登录，则跳转到登录页面
   if (!token && to.path !== '/login') {

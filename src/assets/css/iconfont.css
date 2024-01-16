@@ -13,6 +13,26 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-shezhi:before {
+  content: "\e608";
+}
+
+.icon-zhishiku:before {
+  content: "\e647";
+}
+
+.icon-shouye1:before {
+  content: "\e601";
+}
+
+.icon-zuodisanfangjiemianx:before {
+  content: "\e65c";
+}
+
+.icon-lishijilu:before {
+  content: "\f1e2";
+}
+
 .icon-youxiang:before {
   content: "\e632";
 }

@@ -34,6 +34,7 @@ const exit = () => {
         message: "退出成功",
         duration: 1000,
       });
+      localStorage.removeItem("token");
       setTimeout(() => {
         router.push({ path: "/login" });
       }, 1000);

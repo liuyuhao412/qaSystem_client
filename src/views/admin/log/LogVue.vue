@@ -11,9 +11,10 @@
       >
     </div>
     <div class="log_table">
-      <el-table :data="LogTableData" style="width: 750px" border>
+      <el-table :data="logTableData" style="width: 850px" border>
         <el-table-column prop="id" label="序号" width="80px" />
         <el-table-column prop="username" label="用户" width="200px" />
+        <el-table-column prop="role" label="角色" width="100px" />
         <el-table-column prop="ip" label="IP" width="220px" />
         <el-table-column prop="login_time" label="登录时间" width="250px" />
       </el-table>
@@ -38,7 +39,7 @@
 import { GetLogApi } from "@/api/admin";
 import { ref, onMounted } from "vue";
 const log_username = ref("");
-const LogTableData = ref([]);
+const logTableData = ref([]);
 const currentPage = ref(1);
 const pageSize = ref(5);
 const total = ref(1);
@@ -48,7 +49,7 @@ const loadTableData = async () => {
     page: currentPage.value,
     limit: pageSize.value,
   }).then((res) => {
-    LogTableData.value = res.data.data;
+    logTableData.value = res.data.data;
     total.value = res.data.count;
   });
 };
@@ -60,7 +61,7 @@ const search_log = async () => {
     limit: pageSize.value,
     username: log_username.value,
   }).then((res) => {
-    LogTableData.value = res.data.data;
+    logTableData.value = res.data.data;
     total.value = res.data.count;
   });
 };
@@ -71,7 +72,7 @@ const handleSizeChange = async (val: number) => {
       page: currentPage.value,
       limit: val,
     }).then((res) => {
-      LogTableData.value = res.data.data;
+      logTableData.value = res.data.data;
       total.value = res.data.count;
     });
   } else {
@@ -80,7 +81,7 @@ const handleSizeChange = async (val: number) => {
       limit: val,
       username: log_username.value,
     }).then((res) => {
-      LogTableData.value = res.data.data;
+      logTableData.value = res.data.data;
       total.value = res.data.count;
     });
   }
@@ -92,7 +93,7 @@ const handleCurrentChange = async (val: number) => {
       page: val,
       limit: pageSize.value,
     }).then((res) => {
-      LogTableData.value = res.data.data;
+      logTableData.value = res.data.data;
       total.value = res.data.count;
     });
   } else {
@@ -101,7 +102,7 @@ const handleCurrentChange = async (val: number) => {
       limit: pageSize.value,
       username: log_username.value,
     }).then((res) => {
-      LogTableData.value = res.data.data;
+      logTableData.value = res.data.data;
       total.value = res.data.count;
     });
   }

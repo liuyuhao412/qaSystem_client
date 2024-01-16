@@ -4,11 +4,17 @@ import axios from "axios";
 const request = axios.create({
     baseURL: "/api",
     timeout: 5000,
+    headers: {
+        "Content-Type": "application/json;charset=utf-8",
+    }
 });
 
 //请求拦截器,就是说请求在到达服务器之前,你对发送到服务器的数据进行一些处理,比如后端说除了登录之外的接口都要在请求头上面带上token,你就可以在这里处理
 request.interceptors.request.use(
     (config) => {
+        if (localStorage.getItem("token")) {
+            config.headers.token = localStorage.getItem("token") || "";
+        }
         return config;
     },
     (error) => {

@@ -67,6 +67,7 @@ const onSubmit = () => {
         type: "success",
         duration: 1000,
       });
+      localStorage.setItem("token", res.data.token);
       setTimeout(() => {
         router.push({ path: "/admin_index" });
       }, 1500);
@@ -78,6 +79,7 @@ const onSubmit = () => {
         type: "success",
         duration: 1000,
       });
+      localStorage.setItem("token", res.data.token);
       setTimeout(() => {
         router.push({ path: "/index" });
       }, 1500);

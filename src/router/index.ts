@@ -63,4 +63,15 @@ const router = createRouter({
   routes
 })
 
+router.beforeEach((to, from, next) => {
+  const token:string | null = localStorage.getItem('token');
+
+  // 如果路由需要登录验证，并且用户未登录，则跳转到登录页面
+  if (!token && to.path !== '/login') {
+    next('/login');
+  } else {
+    next();
+  }
+});
+
 export default router

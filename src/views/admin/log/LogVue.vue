@@ -2,7 +2,7 @@
   <div class="log_wrapper">
     <div class="log_header">
       <el-input
-        v-model="log_username"
+        v-model="log_email"
         placeholder="请输入用户"
         class="log_input"
       />
@@ -14,7 +14,7 @@
     <div class="log_table">
       <el-table :data="logTableData" style="width: 850px" border>
         <el-table-column prop="id" label="序号" width="80px" />
-        <el-table-column prop="username" label="用户" width="200px" />
+        <el-table-column prop="email" label="用户" width="200px" />
         <el-table-column prop="role" label="角色" width="100px" />
         <el-table-column prop="ip" label="IP" width="220px" />
         <el-table-column prop="login_time" label="登录时间" width="250px" />
@@ -39,7 +39,7 @@
 <script setup lang="ts">
 import { GetLogApi } from "@/api/admin";
 import { ref, onMounted } from "vue";
-const log_username = ref("");
+const log_email = ref("");
 const log_role = ref("");
 const logTableData = ref([]);
 const currentPage = ref(1);
@@ -61,7 +61,7 @@ const search_log = async () => {
   GetLogApi({
     page: currentPage.value,
     limit: pageSize.value,
-    username: log_username.value,
+    email: log_email.value,
     role: log_role.value,
   }).then((res) => {
     logTableData.value = res.data.data;
@@ -70,7 +70,7 @@ const search_log = async () => {
 };
 
 const handleSizeChange = async (val: number) => {
-  if (log_username.value == "" && log_role.value == "") {
+  if (log_email.value == "" && log_role.value == "") {
     GetLogApi({
       page: currentPage.value,
       limit: val,
@@ -82,7 +82,7 @@ const handleSizeChange = async (val: number) => {
     GetLogApi({
       page: currentPage.value,
       limit: val,
-      username: log_username.value,
+      email: log_email.value,
       role: log_role.value,
     }).then((res) => {
       logTableData.value = res.data.data;
@@ -92,7 +92,7 @@ const handleSizeChange = async (val: number) => {
 };
 
 const handleCurrentChange = async (val: number) => {
-  if (log_username.value == "" && log_role.value == "") {
+  if (log_email.value == "" && log_role.value == "") {
     GetLogApi({
       page: val,
       limit: pageSize.value,
@@ -104,7 +104,7 @@ const handleCurrentChange = async (val: number) => {
     GetLogApi({
       page: val,
       limit: pageSize.value,
-      username: log_username.value,
+      email: log_email.value,
       role: log_role.value,
     }).then((res) => {
       logTableData.value = res.data.data;

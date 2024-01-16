@@ -2,8 +2,8 @@
   <div class="code_wrapper">
     <div class="code_header">
       <el-input
-        v-model="code_username"
-        placeholder="请输入用户"
+        v-model="code_email"
+        placeholder="请输入邮箱"
         class="code_input"
       />
       <el-button type="primary" class="code_btn" @click="search_code"
@@ -39,7 +39,7 @@
 <script setup lang="ts">
 import { GetCodeApi } from "@/api/admin";
 import { ref, onMounted } from "vue";
-const code_username = ref("");
+const code_email = ref("");
 const codeTableData = ref([]);
 const currentPage = ref(1);
 const pageSize = ref(5);
@@ -60,7 +60,7 @@ const search_code = async () => {
   GetCodeApi({
     page: currentPage.value,
     limit: pageSize.value,
-    username: code_username.value,
+    email: code_email.value,
   }).then((res) => {
     codeTableData.value = res.data.data;
     total.value = res.data.count;
@@ -68,7 +68,7 @@ const search_code = async () => {
 };
 
 const handleSizeChange = async (val: number) => {
-  if (code_username.value == "") {
+  if (code_email.value == "") {
     GetCodeApi({
       page: currentPage.value,
       limit: val,
@@ -80,7 +80,7 @@ const handleSizeChange = async (val: number) => {
     GetCodeApi({
       page: currentPage.value,
       limit: val,
-      username: code_username.value,
+      email: code_email.value,
     }).then((res) => {
       codeTableData.value = res.data.data;
       total.value = res.data.count;
@@ -89,7 +89,7 @@ const handleSizeChange = async (val: number) => {
 };
 
 const handleCurrentChange = async (val: number) => {
-  if (code_username.value == "") {
+  if (code_email.value == "") {
     GetCodeApi({
       page: val,
       limit: pageSize.value,
@@ -101,7 +101,7 @@ const handleCurrentChange = async (val: number) => {
     GetCodeApi({
       page: val,
       limit: pageSize.value,
-      username: code_username.value,
+      email: code_email.value,
     }).then((res) => {
       codeTableData.value = res.data.data;
       total.value = res.data.count;

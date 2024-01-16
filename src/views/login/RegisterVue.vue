@@ -8,7 +8,7 @@
         <el-form :model="RegisterForm" label-width="60px">
           <el-form-item>
             <el-input
-              v-model="RegisterForm.Username"
+              v-model="RegisterForm.Email"
               placeholder="Please input your email"
               class="input_box"
             />
@@ -77,7 +77,7 @@ import { useRouter } from "vue-router";
 
 const router = useRouter();
 const RegisterForm = ref({
-  Username: "",
+  Email: "",
   Code: "",
   Password: "",
   ConfirmePassword: "",
@@ -102,7 +102,7 @@ const startCountDown = () => {
 };
 
 const sendCode = () => {
-  SendCodeApi({ Username: RegisterForm.value.Username }).then((res) => {
+  SendCodeApi({ Email: RegisterForm.value.Email }).then((res) => {
     console.log(res)
     if (res.data.code == "1") {
       ElMessage({

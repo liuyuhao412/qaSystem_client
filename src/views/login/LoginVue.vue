@@ -8,8 +8,8 @@
         <el-form :model="LoginForm" label-width="60px">
           <el-form-item>
             <el-input
-              v-model="LoginForm.Username"
-              placeholder="Username/email"
+              v-model="LoginForm.Email"
+              placeholder="Email"
               class="input_box"
             />
             <template #label>
@@ -54,7 +54,7 @@ import { ElMessage } from "element-plus";
 import { useRouter } from "vue-router";
 const router = useRouter();
 const LoginForm = ref({
-  Username: "",
+  Email: "",
   Password: "",
 });
 

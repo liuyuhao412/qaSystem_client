@@ -64,9 +64,7 @@ import { GetUserApi } from "@/api/admin";
 import { ref, onMounted } from "vue";
 const input_username = ref("");
 const input_role = ref("");
-const userTableData = ref([
-  { id: 1, username: 1, role: 1, registration_time: 1 },
-]);
+const userTableData = ref([]);
 const currentPage = ref(1);
 const pageSize = ref(5);
 const total = ref(1);

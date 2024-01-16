@@ -28,7 +28,7 @@ export function GetCodeApi(params: object) {
 */
 export function GetUserApi(params: object) {
     return request({
-        url: base.get_code,
+        url: base.get_user,
         method: "post",
         params,
     })

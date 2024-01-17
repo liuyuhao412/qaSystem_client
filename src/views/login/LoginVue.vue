@@ -8,7 +8,7 @@
         <el-form :model="LoginForm" label-width="60px">
           <el-form-item>
             <el-input
-              v-model="LoginForm.Email"
+              v-model="LoginForm.Username"
               placeholder="Email"
               class="input_box"
             />
@@ -54,7 +54,7 @@ import { ElMessage } from "element-plus";
 import { useRouter } from "vue-router";
 const router = useRouter();
 const LoginForm = ref({
-  Email: "",
+  Username: "",
   Password: "",
 });
 
@@ -67,7 +67,8 @@ const onSubmit = () => {
         type: "success",
         duration: 1000,
       });
-      localStorage.setItem("token", res.data.token);
+      localStorage.setItem("token", res.data.store.token);
+      localStorage.setItem("username", res.data.store.username);
       setTimeout(() => {
         router.push({ path: "/admin_index" });
       }, 1500);
@@ -79,7 +80,8 @@ const onSubmit = () => {
         type: "success",
         duration: 1000,
       });
-      localStorage.setItem("token", res.data.token);
+      localStorage.setItem("token", res.data.store.token);
+      localStorage.setItem("username", res.data.store.username);
       setTimeout(() => {
         router.push({ path: "/index" });
       }, 1500);

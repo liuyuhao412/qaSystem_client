@@ -9,6 +9,7 @@ const base = {
     update_user:"/admin_user/update_user",//编辑用户
     delete_user:"/admin_user/delete_user",//编辑用户
     set_password:"/admin_user/set_password",//重置密码
+    update_password:"/admin_user/update_password",//重置密码
 };
 
 export default base;

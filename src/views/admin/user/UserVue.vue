@@ -2,7 +2,7 @@
   <div class="user_wrapper">
     <div class="user_header">
       <el-input
-        v-model="input_email"
+        v-model="input_username"
         placeholder="请输入用户"
         class="user_input"
       />
@@ -19,18 +19,26 @@
       >
     </div>
     <div class="user_table">
-      <el-table :data="userTableData" style="width: 850px" border>
+      <el-table :data="userTableData" style="width: 1150px" border>
         <el-table-column prop="id" label="序号" width="80px" />
-        <el-table-column prop="email" label="用户" width="200px" />
+        <el-table-column prop="username" label="用户" width="200px" />
+        <el-table-column prop="email" label="邮箱" width="200px" />
         <el-table-column prop="role" label="角色" width="100px" />
         <el-table-column prop="register_time" label="注册时间" width="220px" />
-        <el-table-column label="操作" width="250px">
+        <el-table-column label="操作" width="350px">
           <template #default="scope">
             <el-button size="small" @click="handleEdit(scope.$index, scope.row)"
               >修改</el-button
             >
-            <el-button size="small" @click="setPassword(scope.$index, scope.row)"
+            <el-button
+              size="small"
+              @click="setPassword(scope.$index, scope.row)"
               >重置密码</el-button
+            >
+            <el-button
+              size="small"
+              @click="updatePassword(scope.$index, scope.row)"
+              >修改密码</el-button
             >
             <el-button
               size="small"
@@ -67,8 +75,10 @@
         label-width="80px"
         class="demo-ruleForm"
         status-icon
-      >
-        <el-form-item label="用户">
+        ><el-form-item label="用户">
+          <el-input v-model="addUserForm.username" class="dialog_user_input" />
+        </el-form-item>
+        <el-form-item label="邮箱">
           <el-input v-model="addUserForm.email" class="dialog_user_input" />
         </el-form-item>
         <el-form-item>
@@ -98,7 +108,13 @@
         class="demo-ruleForm"
         status-icon
       >
-        <el-form-item label="用户" prop="email">
+        <el-form-item label="用户" prop="username">
+          <el-input
+            v-model="updateUserForm.username"
+            class="dialog_user_input"
+          />
+        </el-form-item>
+        <el-form-item label="邮箱" prop="email">
           <el-input
             v-model="updateUserForm.email"
             class="dialog_user_input"
@@ -119,6 +135,50 @@
         </el-form-item>
       </el-form>
     </el-dialog>
+
+    <el-dialog
+      v-model="dialogVisiblepwd"
+      title="修改密码"
+      width="30%"
+      :before-close="handleClosePassword"
+    >
+      <el-form
+        :model="passwordForm"
+        label-width="80px"
+        class="demo-ruleForm"
+        status-icon
+      >
+        <el-form-item label="用户" prop="username">
+          <el-input
+            v-model="passwordForm.username"
+            class="dialog_user_input"
+            disabled
+          />
+        </el-form-item>
+        <el-form-item label="密码">
+          <el-input
+            v-model="passwordForm.new_pwd"
+            class="dialog_user_input"
+            type="password"
+          />
+        </el-form-item>
+        <el-form-item label="确认密码">
+          <el-input
+            v-model="passwordForm.confirm_pwd"
+            class="dialog_user_input"
+            type="password"
+          /><span class="dialog_text"
+            >8位以上,包括大小写字母、数字、特殊字符</span
+          >
+        </el-form-item>
+
+        <el-form-item>
+          <el-button class="dialog_btn" type="primary" @click="set_pwd_btn">
+            确认
+          </el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
@@ -128,12 +188,13 @@ import {
   AddUserApi,
   UpdateUserApi,
   DeleteUserApi,
-  SetPasswordApi
+  SetPasswordApi,
+  UpdatePasswordApi,
 } from "@/api/admin";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { ref, onMounted, toRaw } from "vue";
 
-const input_email = ref("");
+const input_username = ref("");
 const input_role = ref("");
 
 const userTableData = ref([]);
@@ -143,13 +204,22 @@ const total = ref(1);
 
 const dialogVisibleAdd = ref(false);
 const dialogVisibleUpdate = ref(false);
+const dialogVisiblepwd = ref(false);
 const addUserForm = ref({
+  username: "",
   email: "",
   role: "",
 });
 const updateUserForm = ref({
+  username: "",
   email: "",
   role: "",
+});
+
+const passwordForm = ref({
+  username: "",
+  new_pwd: "",
+  confirm_pwd: "",
 });
 
 const loadTableData = async () => {
@@ -168,7 +238,7 @@ const search_user = async () => {
   GetUserApi({
     page: currentPage.value,
     limit: pageSize.value,
-    email: input_email.value,
+    username: input_username.value,
     role: input_role.value,
   }).then((res) => {
     userTableData.value = res.data.data;
@@ -191,6 +261,7 @@ const add_user_btn = async () => {
         duration: 1000,
       });
       dialogVisibleAdd.value = false;
+      addUserForm.value.username = "";
       addUserForm.value.email = "";
       addUserForm.value.role = "";
       loadTableData();
@@ -212,6 +283,7 @@ const handleCloseAdd = (done: () => void) => {
   })
     .then(() => {
       done();
+      addUserForm.value.username = "";
       addUserForm.value.email = "";
       addUserForm.value.role = "";
     })
@@ -262,7 +334,7 @@ const handleCloseUpdate = (done: () => void) => {
     });
 };
 
-const setPassword = (index: number, row: any) =>{
+const setPassword = (index: number, row: any) => {
   ElMessageBox.confirm("是否要重置密码", "提示", {
     cancelButtonText: "取消",
     confirmButtonText: "确认",
@@ -286,7 +358,51 @@ const setPassword = (index: number, row: any) =>{
         message: "取消",
       });
     });
-}
+};
+
+const updatePassword = (index: number, row: any) => {
+  // console.log(index, row);
+  dialogVisiblepwd.value = true;
+  passwordForm.value.username = row.username;
+  // console.log(passwordForm);
+};
+
+const set_pwd_btn = async () => {
+  UpdatePasswordApi(passwordForm.value).then((res) => {
+    // console.log(res);
+    if (res.data.code == 1) {
+      ElMessage({
+        message: res.data.msg,
+        type: "success",
+        duration: 1000,
+      });
+      dialogVisiblepwd.value = false;
+    } else {
+      ElMessage({
+        message: res.data.msg,
+        type: "warning",
+        duration: 1000,
+      });
+    }
+  });
+};
+
+const handleClosePassword = (done: () => void) => {
+  ElMessageBox.confirm("您确定要退出修改？", "提示", {
+    cancelButtonText: "取消",
+    confirmButtonText: "确认",
+    type: "warning",
+  })
+    .then(() => {
+      done();
+      passwordForm.value.new_pwd = "";
+      passwordForm.value.confirm_pwd = "";
+    })
+    .catch(() => {
+      // catch error
+    });
+};
+
 const handleDelete = (index: number, row: any) => {
   // console.log(index, toRaw(row).num);
   ElMessageBox.confirm("此操作是永久删除,是否删除该用户？", "提示", {
@@ -315,7 +431,7 @@ const handleDelete = (index: number, row: any) => {
 };
 
 const handleSizeChange = async (val: number) => {
-  if (input_email.value == "" && input_role.value == "") {
+  if (input_username.value == "" && input_role.value == "") {
     GetUserApi({
       page: currentPage.value,
       limit: val,
@@ -327,7 +443,7 @@ const handleSizeChange = async (val: number) => {
     GetUserApi({
       page: currentPage.value,
       limit: val,
-      email: input_email.value,
+      username: input_username.value,
       role: input_role.value,
     }).then((res) => {
       userTableData.value = res.data.data;
@@ -337,7 +453,7 @@ const handleSizeChange = async (val: number) => {
 };
 
 const handleCurrentChange = async (val: number) => {
-  if (input_email.value == "" && input_role.value == "") {
+  if (input_username.value == "" && input_role.value == "") {
     GetUserApi({
       page: val,
       limit: pageSize.value,
@@ -349,7 +465,7 @@ const handleCurrentChange = async (val: number) => {
     GetUserApi({
       page: val,
       limit: pageSize.value,
-      email: input_email.value,
+      username: input_username.value,
       role: input_role.value,
     }).then((res) => {
       userTableData.value = res.data.data;

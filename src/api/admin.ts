@@ -77,3 +77,15 @@ export function SetPasswordApi(params: object) {
         params,
     })
 }
+
+/* 
+*重置密码
+*params：{email}
+*/
+export function UpdatePasswordApi(params: object) {
+    return request({
+        url: base.update_password,
+        method: "post",
+        params,
+    })
+}

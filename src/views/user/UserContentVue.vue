@@ -4,7 +4,7 @@
         <el-button type="primary" plain class="header_btn" @click="exit"
           >退出</el-button
         >
-        <div class="text">用户</div>
+        <div class="text">{{username}}</div>
       </div>
       <div>
         <router-view></router-view>
@@ -21,7 +21,8 @@
   import { useRouter } from "vue-router";
   import { ElMessage, ElMessageBox } from "element-plus";
   const router = useRouter();
-  
+  const username:string | null = localStorage.getItem('username');
+
   const exit = () => {
     ElMessageBox.confirm("您确认要退出吗？", "提示", {
       cancelButtonText: "取消",
@@ -35,6 +36,7 @@
           duration: 1000,
         });
         localStorage.removeItem("token");
+        localStorage.removeItem("username");
         setTimeout(() => {
           router.push({ path: "/login" });
         }, 1000);

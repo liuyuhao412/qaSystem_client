@@ -8,17 +8,20 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/login',
     name: 'login',
-    component: () => import("@/views/login/LoginVue.vue")
+    component: () => import("@/views/login/LoginVue.vue"),
+    meta: { requiresAuth: false }, // 注册页面不需要身份验证
   },
   {
     path: '/register',
     name: 'register',
-    component: () => import("@/views/login/RegisterVue.vue")
+    component: () => import("@/views/login/RegisterVue.vue"),
+    meta: { requiresAuth: false }, // 登录页面不需要身份验证
   },
   {
     path: '/index',
     name: 'index',
     component: () => import("@/views/user/UserIndexVue.vue"),
+    meta: { requiresAuth: true },
     children: [
       {
         path: '/index',
@@ -56,6 +59,7 @@ const routes: Array<RouteRecordRaw> = [
     path: '/admin_index',
     name: 'admin_index',
     component: () => import("@/views/admin/AdminIndexVue.vue"),
+    meta: { requiresAuth: true },
     children: [
       {
         path: '/admin_index',
@@ -99,8 +103,8 @@ router.beforeEach((to, from, next) => {
   const token: string | null = localStorage.getItem('token');
 
   // 如果路由需要登录验证，并且用户未登录，则跳转到登录页面
-  if (!token && to.path !== '/login') {
-    next('/login');
+  if (to.meta.requiresAuth && !token && to.path !== '/login') {
+    next('/login')
   } else {
     next();
   }

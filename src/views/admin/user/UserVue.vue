@@ -309,6 +309,9 @@ const update_user_btn = async () => {
         duration: 1000,
       });
       dialogVisibleUpdate.value = false;
+      const newUser: string | null = updateUserForm.value.username;
+      localStorage.setItem("username", newUser);
+      location.reload();
       loadTableData();
     } else {
       ElMessage({
@@ -418,8 +421,13 @@ const handleDelete = (index: number, row: any) => {
             message: res.data.msg,
             duration: 1000,
           });
+          const newUser = localStorage.getItem("username");
+          if (newUser == toRaw(row).username) {
+            localStorage.removeItem("username");
+            localStorage.removeItem("token");
+          }
+          location.reload();
         }
-        loadTableData();
       });
     })
     .catch(() => {

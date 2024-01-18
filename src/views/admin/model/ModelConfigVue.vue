@@ -1,5 +1,5 @@
 <template>
-    <div>模型</div>
+    <div>模型配置</div>
   </template>
   
   <script setup lang="ts"></script>

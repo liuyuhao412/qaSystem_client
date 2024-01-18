@@ -33,11 +33,6 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("@/views/user/home/HomeVue.vue"),
       },
       {
-        path: "/user_knowledge",
-        name: "user_knowledge",
-        component: () => import("@/views/user/knowledge/KnowledgeIndexVue.vue"),
-      },
-      {
         path: "/user_view",
         name: "user_view",
         component: () => import("@/views/user/qaview/IndexVue.vue"),
@@ -86,9 +81,19 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("@/views/admin/code/CodeVue.vue"),
       },
       {
-        path: "/admin_model",
-        name: "admin_model",
-        component: () => import("@/views/admin/model/ModelVue.vue"),
+        path: "/admin_model_config",
+        name: "admin_model_config",
+        component: () => import("@/views/admin/model/ModelConfigVue.vue"),
+      },
+      {
+        path: "/admin_kb_list",
+        name: "admin_kb_list",
+        component: () => import("@/views/admin/model/KbListVue.vue"),
+      },
+      {
+        path: "/admin_file_list",
+        name: "admin_file_list",
+        component: () => import("@/views/admin/model/FileListVue.vue"),
       },
     ]
   }

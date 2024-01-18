@@ -77,14 +77,49 @@ export function SetPasswordApi(params: object) {
         params,
     })
 }
-
 /* 
-*重置密码
+*修改密码
 *params：{email}
 */
 export function UpdatePasswordApi(params: object) {
     return request({
         url: base.update_password,
+        method: "post",
+        params,
+    })
+}
+
+/* 
+*获取知识库列表数据
+*params：{page,limit}
+*/
+export function GetKbListApi(params: object) {
+    return request({
+        url: base.get_kb_list,
+        method: "post",
+        params,
+    })
+}
+
+/* 
+*创建知识库
+*params：{kb_name}
+*/
+export function AddKbApi(params: object) {
+    return request({
+        url: base.add_kb,
+        method: "post",
+        params,
+    })
+}
+
+/* 
+*删除知识库
+*params：{kb_name}
+*/
+export function DeleteKbApi(params: object) {
+    return request({
+        url: base.delete_kb,
         method: "post",
         params,
     })

@@ -25,10 +25,15 @@
         <span class="iconfont">&#xe624;</span>
         <span>验证码管理</span>
       </el-menu-item>
-      <el-menu-item class="item" index="/admin_model">
-        <span class="iconfont">&#xe60f;</span>
-        <span>模型配置</span>
-      </el-menu-item>
+      <el-sub-menu class="item" index="'/admin_model">
+        <template #title>
+          <span class="iconfont">&#xe60f;</span>
+          <span>模型管理</span>
+        </template>
+        <el-menu-item index="/admin_kb_list">知识库管理</el-menu-item>
+        <el-menu-item index="/admin_file_list">文件管理</el-menu-item
+        ><el-menu-item index="/admin_model_config">模型配置</el-menu-item>
+      </el-sub-menu>
     </el-menu>
   </div>
 </template>
@@ -38,21 +43,21 @@
 <style scoped>
 @import "@/assets/css/iconfont.css";
 h5 {
-  height:25px;
+  height: 25px;
   font-size: 20px;
   font-weight: normal;
   text-align: center;
-  margin-top:15px;
+  margin-top: 15px;
   margin-bottom: 15px;
-  color:#fff;
+  color: #fff;
 }
-.item{
-  width:200px;
+.item {
+  width: 200px;
   border-bottom: 1px solid #778490;
   border-right: 1px solid #778490;
 }
 .iconfont {
-    margin-right: 15px;
-    font-size: 20px;
-  }
+  margin-right: 15px;
+  font-size: 20px;
+}
 </style>

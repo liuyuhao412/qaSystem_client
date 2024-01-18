@@ -2,7 +2,7 @@
   <div class="kb_wrapper">
     <div class="kb_header">
       <el-input
-        placeholder="请输入知识库名"
+        placeholder="请输入要添加的知识库的名称"
         class="kb_input"
         v-model="kb_name"
       />
@@ -11,7 +11,7 @@
     <div class="kb_table">
       <el-table :data="kbTableData" style="width: 400px" border>
         <el-table-column prop="id" label="序号" width="100px" />
-        <el-table-column prop="kb_name" label="知识库名" width="200px" />
+        <el-table-column prop="name" label="知识库名" width="200px" />
         <el-table-column label="操作" width="100px">
           <template #default="scope">
             <el-button

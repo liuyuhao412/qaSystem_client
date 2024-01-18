@@ -124,3 +124,37 @@ export function DeleteKbApi(params: object) {
         params,
     })
 }
+/* 
+*选择知识库
+*params：{kb_name}
+*/
+export function SelectKbApi(params: object) {
+    return request({
+        url: base.select_kb_list,
+        method: "post",
+        params,
+    })
+}
+/* 
+*获取知识库列表数据
+*params：{page,limit}
+*/
+export function GetFileListApi(params: object) {
+    return request({
+        url: base.get_file_list,
+        method: "post",
+        params,
+    })
+}
+/* 
+*获取知识库列表数据
+*params：{那么,filename}
+*/
+export function DeleteDocApi(params: object) {
+    return request({
+        url: base.delete_doc,
+        method: "post",
+        params,
+    })
+}
+

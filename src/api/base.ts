@@ -13,6 +13,9 @@ const base = {
     get_kb_list:"/admin_model/get_kb_list",//获取知识库列表
     add_kb:"/admin_model/add_kb",//创建知识库
     delete_kb:"/admin_model/delete_kb",//删除知识库
+    select_kb_list:"/admin_model/select_kb_list",//选择知识库
+    get_file_list:"/admin_model/get_file_list",//获取文件列表
+    delete_doc:"/admin_model/delete_doc",//删除文件
 };
 
 export default base;

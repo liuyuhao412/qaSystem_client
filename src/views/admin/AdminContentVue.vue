@@ -1,10 +1,23 @@
 <template>
   <div>
     <div class="header">
-      <el-button type="primary" plain class="header_btn" @click="exit"
-        >退出</el-button
-      >
-      <div class="text">{{username}}</div>
+      <div class="hearer_div">
+        <el-dropdown>
+          <el-button type="primary" class="hearer_button">
+            <span>更多</span>
+            <el-icon class="el-icon--right"><arrow-down /></el-icon>
+          </el-button>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item @click="updatePassword"
+                >修改密码</el-dropdown-item
+              >
+              <el-dropdown-item @click="exit">退出</el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
+      </div>
+      <div class="text">{{ username }}</div>
     </div>
     <div>
       <router-view></router-view>
@@ -14,14 +27,67 @@
         Copyright © 知识问答系统 本系统为毕业设计所做，仅供学习参考
       </div>
     </div>
+    <el-dialog
+      v-model="dialogVisiblepwd"
+      title="修改密码"
+      width="30%"
+      :before-close="handleClosePassword"
+    >
+      <el-form
+        :model="passwordForm"
+        label-width="80px"
+        class="demo-ruleForm"
+        status-icon
+      >
+        <el-form-item label="用户" prop="username">
+          <el-input
+            v-model="passwordForm.username"
+            class="dialog_user_input"
+            disabled
+          />
+        </el-form-item>
+        <el-form-item label="密码">
+          <el-input
+            v-model="passwordForm.new_pwd"
+            class="dialog_user_input"
+            type="password"
+          />
+        </el-form-item>
+        <el-form-item label="确认密码">
+          <el-input
+            v-model="passwordForm.confirm_pwd"
+            class="dialog_user_input"
+            type="password"
+          /><span class="dialog_text"
+            >8位以上,包括大小写字母、数字、特殊字符</span
+          >
+        </el-form-item>
+
+        <el-form-item>
+          <el-button class="dialog_btn" type="primary" @click="set_pwd_btn">
+            确认
+          </el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { useRouter } from "vue-router";
 import { ElMessage, ElMessageBox } from "element-plus";
+import { UpdatePasswordApi } from "@/api/admin";
+import { ref } from "vue";
+
 const router = useRouter();
-const username:string | null = localStorage.getItem('username');
+const username: string | null = localStorage.getItem("username");
+const dialogVisiblepwd = ref(false);
+const passwordForm = ref({
+  username: "",
+  new_pwd: "",
+  confirm_pwd: "",
+});
+
 const exit = () => {
   ElMessageBox.confirm("您确认要退出吗？", "提示", {
     cancelButtonText: "取消",
@@ -48,6 +114,49 @@ const exit = () => {
       });
     });
 };
+
+const updatePassword = () => {
+  if (username != null) {
+    dialogVisiblepwd.value = true;
+    passwordForm.value.username = username;
+  }
+};
+
+const set_pwd_btn = async () => {
+  UpdatePasswordApi(passwordForm.value).then((res) => {
+    // console.log(res);
+    if (res.data.code == 1) {
+      ElMessage({
+        message: res.data.msg,
+        type: "success",
+        duration: 1000,
+      });
+      dialogVisiblepwd.value = false;
+    } else {
+      ElMessage({
+        message: res.data.msg,
+        type: "warning",
+        duration: 1000,
+      });
+    }
+  });
+};
+
+const handleClosePassword = (done: () => void) => {
+  ElMessageBox.confirm("您确定要退出修改？", "提示", {
+    cancelButtonText: "取消",
+    confirmButtonText: "确认",
+    type: "warning",
+  })
+    .then(() => {
+      done();
+      passwordForm.value.new_pwd = "";
+      passwordForm.value.confirm_pwd = "";
+    })
+    .catch(() => {
+      // catch error
+    });
+};
 </script>
 
 <style scoped>
@@ -61,12 +170,21 @@ const exit = () => {
   line-height: 55px;
   margin-right: 20px;
 }
-.header_btn {
+
+.hearer_div {
   float: right;
-  width: 60px;
+  width: 80px;
   height: 35px;
+  line-height: 35px;
+  padding-left: 10px;
   margin-top: 10px;
-  margin-right: 20px;
+}
+.hearer_div span {
+  margin-left: 20px;
+}
+.hearer_button {
+  width: 60px;
+  padding-left: 10px;
 }
 .bottom {
   height: 20px;

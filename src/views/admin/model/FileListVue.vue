@@ -19,7 +19,9 @@
       <el-button type="primary" class="file_btn" @click="search_file"
         >查询</el-button
       >
-      <el-button type="primary" class="file_btn">添加文件</el-button>
+      <el-button type="primary" class="file_btn" @click="add_btn"
+        >添加文件</el-button
+      >
     </div>
     <div class="file_table">
       <el-table :data="fileTableData" style="width: 700px" border>
@@ -50,30 +52,125 @@
         />
       </div>
     </div>
+    <el-dialog
+      v-model="dialogVisiblefile"
+      title="上传文件"
+      width="700px"
+      :before-close="handleCloseFile"
+    >
+      <el-form
+        :model="fileForm"
+        label-width="80px"
+        class="demo-ruleForm"
+        status-icon
+      >
+        <el-form-item label="知识库" prop="kb_name">
+          <el-input
+            v-model="kb_name"
+            class="dialog_user_input item_input"
+            disabled
+          />
+        </el-form-item>
+
+        <el-form-item>
+          <el-upload
+            ref="upload"
+            class="upload-demo"
+            action="http://localhost:8081/api/admin_model/upload_file"
+            :limit="1"
+            :on-exceed="handleExceed"
+            :auto-upload="false"
+          >
+            <template #trigger>
+              <el-button type="primary" class="upload_file_btn"
+                >选择文件</el-button
+              >
+            </template>
+            <el-button
+              class="ml-3 upload_file_btn"
+              type="success"
+              @click="submitUpload"
+            >
+              upload to server
+            </el-button>
+            <template #tip>
+              <div class="el-upload__tip text-red text">
+                只能上传一个文件并且旧文件会替代新文件
+              </div>
+            </template>
+          </el-upload>
+        </el-form-item>
+
+        <el-form-item>
+          单段文本最大长度：<el-input-number
+            v-model="fileForm.chunk_size_max_length"
+            :min="1"
+            :max="10000"
+          />
+        </el-form-item>
+
+        <el-form-item>
+          相邻文本重合长度：<el-input-number
+            v-model="fileForm.chunk_overlap_length"
+            :min="1"
+            :max="10000"
+          />
+        </el-form-item>
+
+        <el-form-item>
+          <el-checkbox
+            v-model="fileForm.zh_title_enhance"
+            label="开启中文标题增强"
+            size="large"
+          />
+        </el-form-item>
+
+        <el-form-item>
+          <el-button class="dialog_btn" type="primary" @click="uploadFilesBtn">
+            上传文件
+          </el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import { SelectKbApi, GetFileListApi, DeleteDocApi } from "@/api/admin";
-import { ElMessage, ElMessageBox } from "element-plus";
+import {
+  SelectKbApi,
+  GetFileListApi,
+  DeleteDocApi,
+  UploadApi,
+} from "@/api/admin";
+import type { UploadInstance, UploadProps, UploadRawFile } from 'element-plus'
+import { ElMessage, ElMessageBox,genFileId } from "element-plus";
+const options = ref([{ id: 0, name: "无" }]);
 const fileTableData = ref([]);
 const currentPage = ref(1);
 const pageSize = ref(10);
 const total = ref(5);
-
+const dialogVisiblefile = ref(false);
 const kb_name = ref("");
+const fileForm = ref({
+  kb_name: "",
+  file_list: [],
+  chunk_size_max_length: 250,
+  chunk_overlap_length: 50,
+  zh_title_enhance: false,
+});
+const file_list: any = ref([]);
+const upload = ref<UploadInstance>()
 
-const options = ref([{ id: 0, name: "无" }]);
 
 const SelectKb = async () => {
   SelectKbApi({}).then((res) => {
-    console.log(res);
     options.value = res.data.data;
   });
 };
 
 onMounted(SelectKb);
+
 
 const search_file = () => {
   GetFileListApi({
@@ -98,6 +195,96 @@ const search_file = () => {
     }
   });
 };
+
+const add_btn = () => {
+  dialogVisiblefile.value = true;
+};
+
+const handleExceed: UploadProps['onExceed'] = (files) => {
+  upload.value!.clearFiles()
+  const file = files[0] as UploadRawFile
+  file.uid = genFileId()
+  upload.value!.handleStart(file)
+}
+
+
+
+
+
+
+
+
+
+const submitUpload = ()=>{
+  console.log('chengong ')
+}
+
+const handleSuccess = (res: { file_name: string }) => {
+  console.log(res);
+  // fileForm.value.kb_name = kb_name.value;
+  // file_list.value.push(res.file_name);
+  // fileForm.value.file_list = file_list.value;
+};
+
+const uploadFilesBtn = () => {
+  dialogVisiblefile.value = false;
+  // fileForm.value.kb_name = kb_name.value;
+  console.log(fileForm.value);
+  // UploadApi(fileForm.value).then((res) => {
+  //   if (res.data.code == "200") {
+  //     ElMessage({
+  //       message: res.data.msg,
+  //       type: "success",
+  //       duration: 1000,
+  //     });
+  //     dialogVisiblefile.value = false;
+  //     fileForm.value.kb_name = "";
+  //     fileForm.value.chunk_size_max_length = 250;
+  //     fileForm.value.chunk_overlap_length = 50;
+  //     fileForm.value.zh_title_enhance = false;
+  //     file_list.value = [];
+  //     fileForm.value.file_list = [];
+  //   } else {
+  //     ElMessage({
+  //       message: res.data.msg,
+  //       type: "warning",
+  //       duration: 1000,
+  //     });
+  //   }
+  // });
+};
+
+const handleCloseFile = (done: () => void) => {
+  ElMessageBox.confirm("您确定要退出编辑？", "提示", {
+    cancelButtonText: "取消",
+    confirmButtonText: "确认",
+    type: "warning",
+  })
+    .then(() => {
+      done();
+
+      // fileForm.value.kb_name = "";
+      // fileForm.value.chunk_size_max_length = 250;
+      // fileForm.value.chunk_overlap_length = 50;
+      // fileForm.value.zh_title_enhance = false;
+      // file_list.value = [];
+      // fileForm.value.file_list = [];
+    })
+    .catch(() => {
+      // catch error
+    });
+};
+
+
+
+
+
+
+
+
+
+
+
 
 const handleDelete = (index: number, row: any) => {
   ElMessageBox.confirm("此操作是永久删除,是否删除该知识库？", "提示", {
@@ -181,5 +368,24 @@ const handleCurrentChange = async (val: number) => {
 .select {
   margin-top: 10px;
   margin-right: 20px;
+}
+
+.item_input {
+  width: 200px;
+}
+
+.dialog_btn {
+  width: 140px;
+  margin-left: 130px;
+}
+
+.upload_file_btn {
+  width: 140px;
+  height: 40px;
+  margin-right: 20px;
+}
+
+.text {
+  font-size: 15px;
 }
 </style>

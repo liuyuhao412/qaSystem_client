@@ -148,7 +148,7 @@ export function GetFileListApi(params: object) {
 }
 /* 
 *获取知识库列表数据
-*params：{那么,filename}
+*params：{name,filename}
 */
 export function DeleteDocApi(params: object) {
     return request({
@@ -157,4 +157,14 @@ export function DeleteDocApi(params: object) {
         params,
     })
 }
-
+/* 
+*获取知识库列表数据
+*params：{kb_name,file_list,chunk_size_max_length,chunk_overlap_length,zh_title_enhance}
+*/
+export function UploadApi(params: object) {
+    return request({
+        url: base.upload_form,
+        method: "post",
+        params,
+    })
+}

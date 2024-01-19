@@ -13,6 +13,10 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-shangchuanwenjian:before {
+  content: "\e61b";
+}
+
 .icon-shezhi:before {
   content: "\e608";
 }

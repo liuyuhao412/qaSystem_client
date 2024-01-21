@@ -79,6 +79,7 @@
             action="http://localhost:8081/api/admin_model/upload_file"
             :limit="1"
             :on-exceed="handleExceed"
+            :on-success="handleSuccess"
             :auto-upload="false"
           >
             <template #trigger>
@@ -91,7 +92,7 @@
               type="success"
               @click="submitUpload"
             >
-              upload to server
+              上传文件
             </el-button>
             <template #tip>
               <div class="el-upload__tip text-red text">
@@ -143,8 +144,8 @@ import {
   DeleteDocApi,
   UploadApi,
 } from "@/api/admin";
-import type { UploadInstance, UploadProps, UploadRawFile } from 'element-plus'
-import { ElMessage, ElMessageBox,genFileId } from "element-plus";
+import type { UploadInstance, UploadProps, UploadRawFile } from "element-plus";
+import { ElMessage, ElMessageBox, genFileId } from "element-plus";
 const options = ref([{ id: 0, name: "无" }]);
 const fileTableData = ref([]);
 const currentPage = ref(1);
@@ -154,14 +155,12 @@ const dialogVisiblefile = ref(false);
 const kb_name = ref("");
 const fileForm = ref({
   kb_name: "",
-  file_list: [],
+  file: "",
   chunk_size_max_length: 250,
   chunk_overlap_length: 50,
   zh_title_enhance: false,
 });
-const file_list: any = ref([]);
-const upload = ref<UploadInstance>()
-
+const upload = ref<UploadInstance>();
 
 const SelectKb = async () => {
   SelectKbApi({}).then((res) => {
@@ -170,7 +169,6 @@ const SelectKb = async () => {
 };
 
 onMounted(SelectKb);
-
 
 const search_file = () => {
   GetFileListApi({
@@ -200,58 +198,50 @@ const add_btn = () => {
   dialogVisiblefile.value = true;
 };
 
-const handleExceed: UploadProps['onExceed'] = (files) => {
-  upload.value!.clearFiles()
-  const file = files[0] as UploadRawFile
-  file.uid = genFileId()
-  upload.value!.handleStart(file)
-}
+const handleExceed: UploadProps["onExceed"] = (files) => {
+  upload.value!.clearFiles();
+  const file = files[0] as UploadRawFile;
+  file.uid = genFileId();
+  upload.value!.handleStart(file);
+};
 
+const submitUpload = () => {
+  upload.value!.submit();
+};
 
-
-
-
-
-
-
-
-const submitUpload = ()=>{
-  console.log('chengong ')
-}
-
-const handleSuccess = (res: { file_name: string }) => {
-  console.log(res);
-  // fileForm.value.kb_name = kb_name.value;
-  // file_list.value.push(res.file_name);
-  // fileForm.value.file_list = file_list.value;
+const handleSuccess = (res: { file: string; msg: string }) => {
+  fileForm.value.kb_name = kb_name.value;
+  fileForm.value.file = res.file;
+  ElMessage({
+    message: res.msg,
+    type: "success",
+    duration: 1000,
+  });
 };
 
 const uploadFilesBtn = () => {
   dialogVisiblefile.value = false;
-  // fileForm.value.kb_name = kb_name.value;
-  console.log(fileForm.value);
-  // UploadApi(fileForm.value).then((res) => {
-  //   if (res.data.code == "200") {
-  //     ElMessage({
-  //       message: res.data.msg,
-  //       type: "success",
-  //       duration: 1000,
-  //     });
-  //     dialogVisiblefile.value = false;
-  //     fileForm.value.kb_name = "";
-  //     fileForm.value.chunk_size_max_length = 250;
-  //     fileForm.value.chunk_overlap_length = 50;
-  //     fileForm.value.zh_title_enhance = false;
-  //     file_list.value = [];
-  //     fileForm.value.file_list = [];
-  //   } else {
-  //     ElMessage({
-  //       message: res.data.msg,
-  //       type: "warning",
-  //       duration: 1000,
-  //     });
-  //   }
-  // });
+  fileForm.value.kb_name = kb_name.value;
+  UploadApi(fileForm.value).then((res) => {
+    if (res.data.code == "200") {
+      ElMessage({
+        message: res.data.msg,
+        type: "success",
+        duration: 1000,
+      });
+      fileForm.value.chunk_size_max_length = 250;
+      fileForm.value.chunk_overlap_length = 50;
+      fileForm.value.zh_title_enhance = false;
+      fileForm.value.file = "";
+      dialogVisiblefile.value = false;
+    } else {
+      ElMessage({
+        message: res.data.msg,
+        type: "warning",
+        duration: 1000,
+      });
+    }
+  });
 };
 
 const handleCloseFile = (done: () => void) => {
@@ -274,17 +264,6 @@ const handleCloseFile = (done: () => void) => {
       // catch error
     });
 };
-
-
-
-
-
-
-
-
-
-
-
 
 const handleDelete = (index: number, row: any) => {
   ElMessageBox.confirm("此操作是永久删除,是否删除该知识库？", "提示", {

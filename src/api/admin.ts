@@ -159,7 +159,7 @@ export function DeleteDocApi(params: object) {
 }
 /* 
 *获取知识库列表数据
-*params：{kb_name,file_list,chunk_size_max_length,chunk_overlap_length,zh_title_enhance}
+*params：{kb_name,file,chunk_size_max_length,chunk_overlap_length,zh_title_enhance}
 */
 export function UploadApi(params: object) {
     return request({

@@ -13,10 +13,6 @@
           <span class="iconfont">&#xe601;</span>
           <span>首页</span>
         </el-menu-item>
-        <el-menu-item class="item" index="/user_knowledge">
-          <span class="iconfont">&#xe647;</span>
-          <span>知识库</span>
-        </el-menu-item>
         <el-menu-item class="item" index="/user_view">
           <span class="iconfont">&#xe65c;</span>
           <span>问答界面</span>
@@ -24,10 +20,6 @@
         <el-menu-item class="item" index="user_history">
           <span class="iconfont">&#xf1e2;</span>
           <span>历史消息记录</span>
-        </el-menu-item>
-        <el-menu-item class="item" index="user_setting">
-          <span class="iconfont">&#xe608;</span>
-          <span>个人设置</span>
         </el-menu-item>
       </el-menu>
     </div>

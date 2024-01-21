@@ -84,13 +84,14 @@ const add_kb = async () => {
 };
 
 const handleDelete = async (index: number, row: any) => {
+  console.log(row)
   ElMessageBox.confirm("此操作是永久删除,是否删除该知识库？", "提示", {
     cancelButtonText: "取消",
     confirmButtonText: "确认",
     type: "warning",
   })
     .then(() => {
-      DeleteKbApi({ kb_name: row.kb_name }).then((res) => {
+      DeleteKbApi({ kb_name: row.name }).then((res) => {
         if (res.data.code == "200") {
           ElMessage({
             type: "success",

@@ -252,13 +252,10 @@ const handleCloseFile = (done: () => void) => {
   })
     .then(() => {
       done();
-
-      // fileForm.value.kb_name = "";
-      // fileForm.value.chunk_size_max_length = 250;
-      // fileForm.value.chunk_overlap_length = 50;
-      // fileForm.value.zh_title_enhance = false;
-      // file_list.value = [];
-      // fileForm.value.file_list = [];
+      fileForm.value.chunk_size_max_length = 250;
+      fileForm.value.chunk_overlap_length = 50;
+      fileForm.value.zh_title_enhance = false;
+      fileForm.value.file = "";
     })
     .catch(() => {
       // catch error

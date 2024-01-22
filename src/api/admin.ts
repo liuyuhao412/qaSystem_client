@@ -168,3 +168,27 @@ export function UploadApi(params: object) {
         params,
     })
 }
+/* 
+*获取知识库列表数据
+*params：{key，value}
+*/
+export function GetConfigApi(params: object) {
+    return request({
+        url: base.get_config,
+        method: "post",
+        params,
+    })
+}
+
+/* 
+*获取知识库列表数据
+*params：{key，value}
+*/
+export function SaveConfigApi(params: object) {
+    return request({
+        url: base.save_config,
+        method: "post",
+        params,
+    })
+}
+

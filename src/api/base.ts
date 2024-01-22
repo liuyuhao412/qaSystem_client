@@ -18,6 +18,9 @@ const base = {
     delete_doc:"/admin_model/delete_doc",//删除文件
     upload:"/admin_model/upload",//上传文件
     upload_form:"/admin_model/upload_form",//上传
+    get_config:"/admin_model/get_config",//保存配置
+    save_config:"/admin_model/save_config",//保存配置
+    chat:"/chat",//聊天
 };
 
 export default base;

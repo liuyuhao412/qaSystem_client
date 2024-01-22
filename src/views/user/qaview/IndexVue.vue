@@ -32,33 +32,19 @@
 
 <script setup lang="ts">
 import { ref, onMounted, nextTick } from "vue";
+import { ChatApi } from "@/api/user";
 
 interface Message {
   text: string;
   role: string;
 }
 
-const messagesList = ref<Message[]>([
-  { text: "你好啊", role: "user" },
-  { text: "我很好", role: "system" },
-  { text: "你好啊", role: "user" },
-  { text: "我很好", role: "system" },
-  {
-    text: "在CSS中，margin属性可以接受1到4个值，这些值分别表示上、右、下、左边的外边距。当margin属性设置一个值时，这个值将应用到所有四个边的外边距。当margin属性设置两个值时，第一个值将应用到上和下的外边距，第二个值将应用到左和右的外边距。",
-    role: "user",
-  },
-  {
-    text: "在CSS中，margin属性可以接受1到4个值，这些值分别表示上、右、下、左边的外边距。当margin属性设置一个值时，这个值将应用到所有四个边的外边距。当margin属性设置两个值时，第一个值将应用到上和下的外边距，第二个值将应用到左和右的外边距。",
-    role: "system",
-  },
-  { text: "你好啊", role: "user" },
-  { text: "我很好", role: "system" },
-]);
+const messagesList = ref<Message[]>([]);
 const chatBox = ref<HTMLDivElement | null>(null);
 const newMessage = ref<string>("");
+const username: string | null = localStorage.getItem("username");
 
 const chatToBottom = () => {
-  console.log(chatBox.value);
   if (chatBox.value) {
     chatBox.value.scrollTop = chatBox.value.scrollHeight;
   }
@@ -68,11 +54,16 @@ onMounted(() => {
   chatToBottom();
 });
 
-const sendMessage = (): void => {
+const sendMessage = async () => {
   if (newMessage.value.trim() === "") return;
   messagesList.value.push({ text: newMessage.value, role: "user" });
+  const question = newMessage.value;
   newMessage.value = "";
   chatToBottom();
+  ChatApi({ question: question, username: username }).then((res) => {
+    messagesList.value.push({ text: res.data.answer, role: "system" });
+    chatToBottom();
+  });
 };
 
 const sendMessageOnEnter = () => {

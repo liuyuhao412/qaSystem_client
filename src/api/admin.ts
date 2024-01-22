@@ -169,7 +169,7 @@ export function UploadApi(params: object) {
     })
 }
 /* 
-*获取知识库列表数据
+*获取配置列表数据
 *params：{key，value}
 */
 export function GetConfigApi(params: object) {
@@ -181,7 +181,7 @@ export function GetConfigApi(params: object) {
 }
 
 /* 
-*获取知识库列表数据
+*保存配置
 *params：{key，value}
 */
 export function SaveConfigApi(params: object) {
@@ -192,3 +192,14 @@ export function SaveConfigApi(params: object) {
     })
 }
 
+/* 
+*获取历史记录表格数据
+*params：{page,limit,username,role}
+*/
+export function GetHistoryApi(params: object) {
+    return request({
+        url: base.get_history,
+        method: "post",
+        params,
+    })
+}

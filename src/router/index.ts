@@ -89,6 +89,11 @@ const routes: Array<RouteRecordRaw> = [
         name: "admin_file_list",
         component: () => import("@/views/admin/model/FileListVue.vue"),
       },
+      {
+        path: "/admin_history",
+        name: "admin_history",
+        component: () => import("@/views/admin/history/HistoryVue.vue"),
+      },
     ]
   }
 ]

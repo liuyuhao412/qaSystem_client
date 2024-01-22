@@ -20,7 +20,9 @@ const base = {
     upload_form:"/admin_model/upload_form",//上传
     get_config:"/admin_model/get_config",//保存配置
     save_config:"/admin_model/save_config",//保存配置
+    get_history:"/admin_history/get_history",//获取历史记录列表
     chat:"/chat",//聊天
+    get_user_history:"/get_history"//获取用户历史记录列表
 };
 
 export default base;

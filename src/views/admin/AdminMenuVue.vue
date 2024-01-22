@@ -34,6 +34,10 @@
         <el-menu-item index="/admin_file_list">文件管理</el-menu-item
         ><el-menu-item index="/admin_model_config">模型配置</el-menu-item>
       </el-sub-menu>
+      <el-menu-item class="item" index="/admin_history">
+        <span class="iconfont">&#xf1e2;</span>
+        <span>聊天记录管理</span>
+      </el-menu-item>
     </el-menu>
   </div>
 </template>

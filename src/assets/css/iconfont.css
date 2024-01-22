@@ -13,6 +13,18 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-robot-img:before {
+  content: "\e61a";
+}
+
+.icon-user:before {
+  content: "\e625";
+}
+
+.icon-tubiao_tijiao:before {
+  content: "\e63b";
+}
+
 .icon-shangchuanwenjian:before {
   content: "\e61b";
 }
@@ -37,18 +49,6 @@
   content: "\f1e2";
 }
 
-.icon-youxiang:before {
-  content: "\e632";
-}
-
-.icon-yonghu:before {
-  content: "\e634";
-}
-
-.icon-mima:before {
-  content: "\e6b2";
-}
-
 .icon-yanzhengyanzhengma:before {
   content: "\e624";
 }
@@ -68,3 +68,16 @@
 .icon-guanlidenglurizhi:before {
   content: "\ea45";
 }
+
+.icon-youxiang:before {
+  content: "\e632";
+}
+
+.icon-yonghu:before {
+  content: "\e634";
+}
+
+.icon-mima:before {
+  content: "\e6b2";
+}
+

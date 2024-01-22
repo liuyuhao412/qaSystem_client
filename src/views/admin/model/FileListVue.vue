@@ -245,7 +245,7 @@ const uploadFilesBtn = () => {
 };
 
 const handleCloseFile = (done: () => void) => {
-  ElMessageBox.confirm("您确定要退出编辑？", "提示", {
+  ElMessageBox.confirm("您确定要退出编辑？", "提示", {    
     cancelButtonText: "取消",
     confirmButtonText: "确认",
     type: "warning",

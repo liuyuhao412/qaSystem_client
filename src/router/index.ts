@@ -42,12 +42,6 @@ const routes: Array<RouteRecordRaw> = [
         name: "user_history",
         component: () => import("@/views/user/history/HistoryIndexVue.vue"),
       },
-      {
-        path: "/user_setting",
-        name: "user_setting",
-        component: () => import("@/views/user/setting/SettingVue.vue"),
-      },
-
     ]
   },
   {

@@ -11,8 +11,8 @@
       >
     </div>
     <div class="code_table">
-      <el-table :data="codeTableData" style="width: 1000px" border>
-        <el-table-column prop="id" label="序号" width="80px" />
+      <el-table :data="codeTableData" style="width: 1000px">
+        <el-table-column type="index" label="序号" :index="IndexMethod" width="80px" />
         <el-table-column prop="email" label="邮箱" width="200px" />
         <el-table-column prop="code" label="验证码" width="120px" />
         <el-table-column prop="is_valid" label="验证码状态" width="100px" />
@@ -107,6 +107,12 @@ const handleCurrentChange = async (val: number) => {
       total.value = res.data.count;
     });
   }
+};
+
+const IndexMethod = (index : number) => {
+  const Indexpage = currentPage.value;
+  const IndexSize = pageSize.value;
+  return index + 1 + (Indexpage - 1) * IndexSize;
 };
 </script>
 

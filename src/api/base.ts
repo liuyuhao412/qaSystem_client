@@ -4,6 +4,10 @@ const base = {
     send_code: "/register/send_code",//发送验证码
     get_log:"/admin_log/get_log",//获取日志列表
     get_code:"/admin_code/get_code",//获取验证码列表
+    get_user_count:"/admin_home/get_user_count",//获取用户数量
+    get_register_list:"/admin_home/get_register_list",//获取用户数量
+    get_user_log:"/admin_home/get_user_log",//获取用户登录次数
+    get_login_list:"/admin_home/get_login_list",//获取用户各个月登录次数
     get_user:"/admin_user/get_user",//获取用户列表
     add_user:"/admin_user/add_user",//添加用户
     update_user:"/admin_user/update_user",//编辑用户

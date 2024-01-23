@@ -1,66 +1,113 @@
 <template>
-    <div class="history_wrapper">
-      <div class="history_header">
-        <el-input
-          v-model="history_username"
-          placeholder="请输入用户"
-          class="history_input"
-        />
-        <el-input v-model="history_role" placeholder="请输入角色" class="history_input" />
-        <el-button type="primary" class="history_btn" @click="search_history"
-          >查询</el-button
-        >
-      </div>
-      <div class="history_table">
-        <el-table :data="historyTableData" style="width: 1200px" border>
-          <el-table-column prop="id" label="序号" width="80px" />
-          <el-table-column prop="message" label="记录" width="600px" />
-          <el-table-column prop="username" label="用户" width="200px" />
-          <el-table-column prop="role" label="角色" width="100px" />
-          <el-table-column prop="time" label="时间" width="220px" />
-        </el-table>
-      </div>
+  <div class="history_wrapper">
+    <div class="history_header">
+      <el-input
+        v-model="history_username"
+        placeholder="请输入用户"
+        class="history_input"
+      />
+      <el-input
+        v-model="history_role"
+        placeholder="请输入角色"
+        class="history_input"
+      />
+      <el-button type="primary" class="history_btn" @click="search_history"
+        >查询</el-button
+      >
+    </div>
+    <div class="history_table">
+      <el-table :data="historyTableData" style="width: 1200px" border>
+        <el-table-column type="index" label="序号" :index="IndexMethod" width="80px" />
+        <el-table-column prop="message" label="记录" width="600px" />
+        <el-table-column prop="username" label="用户" width="200px" />
+        <el-table-column prop="role" label="角色" width="100px" />
+        <el-table-column prop="time" label="时间" width="220px" />
+      </el-table>
+    </div>
 
-      <div class="history_page">
-        <div class="demo-pagination-block">
-          <el-pagination
-            v-model:current-page="currentPage"
-            v-model:page-size="pageSize"
-            :page-sizes="[3, 5]"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="total"
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-          />
-        </div>
+    <div class="history_page">
+      <div class="demo-pagination-block">
+        <el-pagination
+          v-model:current-page="currentPage"
+          v-model:page-size="pageSize"
+          :page-sizes="[3, 5]"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="total"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+        />
       </div>
     </div>
-  </template>
-  
-  <script setup lang="ts">
-  import { GetHistoryApi } from "@/api/admin";
-  import { ref, onMounted } from "vue";
-  const history_username = ref("");
-  const history_role = ref("");
-  const historyTableData = ref([]);
-  const currentPage = ref(1);
-  const pageSize = ref(3);
-  const total = ref(1);
-  
-  const loadTableData = async () => {
+  </div>
+</template>
+
+<script setup lang="ts">
+import { GetHistoryApi } from "@/api/admin";
+import { ref, onMounted } from "vue";
+const history_username = ref("");
+const history_role = ref("");
+const historyTableData = ref([]);
+const currentPage = ref(1);
+const pageSize = ref(3);
+const total = ref(1);
+
+const loadTableData = async () => {
+  GetHistoryApi({
+    page: currentPage.value,
+    limit: pageSize.value,
+  }).then((res) => {
+    historyTableData.value = res.data.data;
+    total.value = res.data.count;
+  });
+};
+onMounted(loadTableData);
+
+const search_history = async () => {
+  GetHistoryApi({
+    page: currentPage.value,
+    limit: pageSize.value,
+    username: history_username.value,
+    role: history_role.value,
+  }).then((res) => {
+    historyTableData.value = res.data.data;
+    total.value = res.data.count;
+  });
+};
+
+const handleSizeChange = async (val: number) => {
+  if (history_username.value == "" && history_role.value == "") {
     GetHistoryApi({
       page: currentPage.value,
+      limit: val,
+    }).then((res) => {
+      historyTableData.value = res.data.data;
+      total.value = res.data.count;
+    });
+  } else {
+    GetHistoryApi({
+      page: currentPage.value,
+      limit: val,
+      username: history_username.value,
+      role: history_role.value,
+    }).then((res) => {
+      historyTableData.value = res.data.data;
+      total.value = res.data.count;
+    });
+  }
+};
+
+const handleCurrentChange = async (val: number) => {
+  if (history_username.value == "" && history_role.value == "") {
+    GetHistoryApi({
+      page: val,
       limit: pageSize.value,
     }).then((res) => {
       historyTableData.value = res.data.data;
       total.value = res.data.count;
     });
-  };
-  onMounted(loadTableData);
-  
-  const search_history = async () => {
+  } else {
     GetHistoryApi({
-      page: currentPage.value,
+      page: val,
       limit: pageSize.value,
       username: history_username.value,
       role: history_role.value,
@@ -68,79 +115,41 @@
       historyTableData.value = res.data.data;
       total.value = res.data.count;
     });
-  };
-  
-  const handleSizeChange = async (val: number) => {
-    if (history_username.value == "" && history_role.value == "") {
-        GetHistoryApi({
-        page: currentPage.value,
-        limit: val,
-      }).then((res) => {
-        historyTableData.value = res.data.data;
-        total.value = res.data.count;
-      });
-    } else {
-        GetHistoryApi({
-        page: currentPage.value,
-        limit: val,
-        username: history_username.value,
-        role: history_role.value,
-      }).then((res) => {
-        historyTableData.value = res.data.data;
-        total.value = res.data.count;
-      });
-    }
-  };
-  
-  const handleCurrentChange = async (val: number) => {
-    if (history_username.value == "" && history_role.value == "") {
-        GetHistoryApi({
-        page: val,
-        limit: pageSize.value,
-      }).then((res) => {
-        historyTableData.value = res.data.data;
-        total.value = res.data.count;
-      });
-    } else {
-        GetHistoryApi({
-        page: val,
-        limit: pageSize.value,
-        username: history_username.value,
-        role: history_role.value,
-      }).then((res) => {
-        historyTableData.value = res.data.data;
-        total.value = res.data.count;
-      });
-    }
-  };
-  </script>
-  
-  <style scoped>
-  .history_wrapper {
-    margin: 10px 20px;
   }
-  .history_header {
-    height: 60px;
-    width: 1000px;
-  }
-  .history_input {
-    height: 40px;
-    width: 240px;
-    margin-top: 10px;
-    margin-right: 20px;
-  }
-  .history_btn {
-    height: 40px;
-    width: 100px;
-    margin-top: 10px;
-    font-size: 15px;
-  }
-  .history_table {
-    margin-top: 10px;
-    margin-bottom: 20px;
-  }
-  .history_page {
-    margin-left: 10px;
-  }
-  </style>
-  
+};
+
+const IndexMethod = (index : number) => {
+  const Indexpage = currentPage.value;
+  const IndexSize = pageSize.value;
+  return index + 1 + (Indexpage - 1) * IndexSize;
+};
+</script>
+
+<style scoped>
+.history_wrapper {
+  margin: 10px 20px;
+}
+.history_header {
+  height: 60px;
+  width: 1000px;
+}
+.history_input {
+  height: 40px;
+  width: 240px;
+  margin-top: 10px;
+  margin-right: 20px;
+}
+.history_btn {
+  height: 40px;
+  width: 100px;
+  margin-top: 10px;
+  font-size: 15px;
+}
+.history_table {
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+.history_page {
+  margin-left: 10px;
+}
+</style>

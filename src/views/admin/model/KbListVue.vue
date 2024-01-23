@@ -9,8 +9,8 @@
       <el-button type="primary" class="kb_btn" @click="add_kb">添加</el-button>
     </div>
     <div class="kb_table">
-      <el-table :data="kbTableData" style="width: 400px" border>
-        <el-table-column prop="id" label="序号" width="100px" />
+      <el-table :data="kbTableData" style="width: 400px">
+        <el-table-column type="index" label="序号" :index="IndexMethod" width="100px" />
         <el-table-column prop="name" label="知识库名" width="200px" />
         <el-table-column label="操作" width="100px">
           <template #default="scope">
@@ -46,7 +46,7 @@ const kb_name = ref("");
 const kbTableData = ref([]);
 const currentPage = ref(1);
 const pageSize = ref(10);
-const total = ref(5);
+const total = ref(0);
 
 const getKbList = async () => {
   GetKbListApi({
@@ -119,6 +119,12 @@ const handleCurrentChange = async (val: number) => {
     kbTableData.value = res.data.data;
     total.value = res.data.count;
   });
+};
+
+const IndexMethod = (index : number) => {
+  const Indexpage = currentPage.value;
+  const IndexSize = pageSize.value;
+  return index + 1 + (Indexpage - 1) * IndexSize;
 };
 </script>
 

@@ -12,7 +12,7 @@
     </div>
     <div class="history_table">
       <el-table :data="historyTableData" style="width: 1200px" border>
-        <el-table-column prop="id" label="序号" width="80px" />
+        <el-table-column type="index" label="序号" :index="IndexMethod" width="80px" />
         <el-table-column prop="message" label="记录" width="600px" />
         <el-table-column prop="username" label="用户" width="200px" />
         <el-table-column prop="role" label="角色" width="100px" />
@@ -115,6 +115,11 @@ const handleCurrentChange = async (val: number) => {
       total.value = res.data.count;
     });
   }
+};
+const IndexMethod = (index : number) => {
+  const Indexpage = currentPage.value;
+  const IndexSize = pageSize.value;
+  return index + 1 + (Indexpage - 1) * IndexSize;
 };
 </script>
 

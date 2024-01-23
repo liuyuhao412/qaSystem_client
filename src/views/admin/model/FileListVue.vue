@@ -24,8 +24,8 @@
       >
     </div>
     <div class="file_table">
-      <el-table :data="fileTableData" style="width: 700px" border>
-        <el-table-column prop="id" label="序号" width="100px" />
+      <el-table :data="fileTableData" style="width: 700px">
+        <el-table-column type="index" label="序号" :index="IndexMethod" width="100px" />
         <el-table-column prop="name" label="文件名" width="500px" />
         <el-table-column label="操作" width="100px">
           <template #default="scope">
@@ -317,6 +317,12 @@ const handleCurrentChange = async (val: number) => {
     fileTableData.value = res.data.data;
     total.value = res.data.count;
   });
+};
+
+const IndexMethod = (index : number) => {
+  const Indexpage = currentPage.value;
+  const IndexSize = pageSize.value;
+  return index + 1 + (Indexpage - 1) * IndexSize;
 };
 </script>
 

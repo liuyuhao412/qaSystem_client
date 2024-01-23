@@ -22,6 +22,49 @@ export function GetCodeApi(params: object) {
         params,
     })
 }
+
+/* 
+*获取用户总数
+*/
+export function GetUserCountApi() {
+    return request({
+        url: base.get_user_count,
+        method: "get",
+    })
+}
+
+/* 
+*获取注册用户列表
+*/
+export function GetRegisterListApi() {
+    return request({
+        url: base.get_register_list,
+        method: "get",
+    })
+}
+
+/* 
+*获取用户登录总数
+*/
+export function GetUserLogApi() {
+    return request({
+        url: base.get_user_log,
+        method: "get",
+    })
+}
+
+/* 
+*获取注册用户列表
+*/
+export function GetLoginListApi() {
+    return request({
+        url: base.get_login_list,
+        method: "get",
+    })
+}
+
+
+
 /* 
 *获取用户表格数据
 *params：{page,limit,email,role}

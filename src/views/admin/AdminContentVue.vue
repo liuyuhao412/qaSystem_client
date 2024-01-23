@@ -19,6 +19,7 @@
       </div>
       <div class="text">{{ username }}</div>
     </div>
+    
     <div>
       <router-view></router-view>
     </div>
@@ -76,6 +77,7 @@
 <script lang="ts" setup>
 import { useRouter } from "vue-router";
 import { ElMessage, ElMessageBox } from "element-plus";
+import { ArrowDown } from '@element-plus/icons-vue'
 import { UpdatePasswordApi } from "@/api/admin";
 import { ref } from "vue";
 
@@ -173,7 +175,7 @@ const handleClosePassword = (done: () => void) => {
 
 .hearer_div {
   float: right;
-  width: 80px;
+  width: 100px;
   height: 35px;
   line-height: 35px;
   padding-left: 10px;
@@ -183,7 +185,7 @@ const handleClosePassword = (done: () => void) => {
   margin-left: 20px;
 }
 .hearer_button {
-  width: 60px;
+  width: 80px;
   padding-left: 10px;
 }
 .bottom {

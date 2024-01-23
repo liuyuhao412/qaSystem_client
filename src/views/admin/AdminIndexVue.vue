@@ -1,7 +1,7 @@
 <template>
   <div class="layout">
-    <AdminMenuVue class="menu"></AdminMenuVue>
-    <AdminContentVue class="content"></AdminContentVue>
+    <AdminMenuVue class="admin_menu"></AdminMenuVue>
+    <AdminContentVue class="admin_content"></AdminContentVue>
   </div>
 </template>
 
@@ -11,7 +11,7 @@ import AdminContentVue from "@/views/admin/AdminContentVue.vue";
 </script>
 
 <style scoped>
-.layout > .menu {
+.layout > .admin_menu {
   width: 200px;
   min-height: 500px;
   background-color: #6d7379;
@@ -21,7 +21,7 @@ import AdminContentVue from "@/views/admin/AdminContentVue.vue";
   bottom: 0;
 }
 
-.layout > .content {
+.layout > .admin_content {
   margin-left: 200px;
   min-height: 500px;
 }

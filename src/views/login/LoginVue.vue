@@ -69,6 +69,7 @@ const onSubmit = () => {
       });
       localStorage.setItem("token", res.data.store.token);
       localStorage.setItem("username", res.data.store.username);
+      localStorage.setItem("role", res.data.store.role);
       setTimeout(() => {
         router.push({ path: "/admin_index" });
       }, 1500);
@@ -82,6 +83,7 @@ const onSubmit = () => {
       });
       localStorage.setItem("token", res.data.store.token);
       localStorage.setItem("username", res.data.store.username);
+      localStorage.setItem("role", res.data.store.role);
       setTimeout(() => {
         router.push({ path: "/index" });
       }, 1500);

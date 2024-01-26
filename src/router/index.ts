@@ -21,7 +21,7 @@ const routes: Array<RouteRecordRaw> = [
     path: '/index',
     name: 'index',
     component: () => import("@/views/user/UserIndexVue.vue"),
-    meta: { requiresAuth: true },
+    meta: { requiresAuth: true, role: 'user' },
     children: [
       {
         path: '/index',
@@ -36,7 +36,7 @@ const routes: Array<RouteRecordRaw> = [
         path: "/user_view",
         name: "user_view",
         component: () => import("@/views/user/qaview/IndexVue.vue"),
-      }, 
+      },
       {
         path: "/user_history",
         name: "user_history",
@@ -48,7 +48,7 @@ const routes: Array<RouteRecordRaw> = [
     path: '/admin_index',
     name: 'admin_index',
     component: () => import("@/views/admin/AdminIndexVue.vue"),
-    meta: { requiresAuth: true },
+    meta: { requiresAuth: true, role: 'admin' },
     children: [
       {
         path: '/admin_index',
@@ -104,12 +104,24 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  const token: string | null = localStorage.getItem('token');
+  const token = localStorage.getItem('token');
+  const userRole = localStorage.getItem('role');
 
-  // 如果路由需要登录验证，并且用户未登录，则跳转到登录页面
-  if (to.meta.requiresAuth && !token && to.path !== '/login') {
-    next('/login')
+  // 如果路由需要登录验证
+  if (to.meta.requiresAuth) {
+    // 如果用户未登录，则跳转到登录页面
+    if (!token) {
+      next('/login');
+    } else {
+      // 如果用户角色不匹配路由要求的角色，跳转到其他页面
+      if (to.meta.role && to.meta.role !== userRole) {
+        next('/');
+      } else {
+        next();
+      }
+    }
   } else {
+    // 如果路由不需要登录验证，直接放行
     next();
   }
 });

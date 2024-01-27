@@ -23,11 +23,11 @@
     <div>
       <router-view></router-view>
     </div>
-    <div class="bottom">
+    <!-- <div class="bottom">
       <div class="bottom_text">
         Copyright © 知识问答系统 本系统为毕业设计所做，仅供学习参考
       </div>
-    </div>
+    </div> -->
     <el-dialog
       v-model="dialogVisiblepwd"
       title="修改密码"

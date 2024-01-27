@@ -9,7 +9,7 @@
           <el-form-item>
             <el-input
               v-model="RegisterForm.Email"
-              placeholder="Please input your email"
+              placeholder="请输入邮箱"
               class="input_box"
             />
             <template #label>
@@ -21,7 +21,7 @@
           <el-form-item>
             <el-input
               v-model="RegisterForm.Code"
-              placeholder="Code"
+              placeholder="验证码"
               class="input_code"
             />
             <el-button
@@ -35,7 +35,7 @@
           <el-form-item>
             <el-input
               v-model="RegisterForm.Password"
-              placeholder="Password"
+              placeholder="请输入密码"
               type="password"
               class="input_box"
             />
@@ -48,19 +48,19 @@
           <el-form-item>
             <el-input
               v-model="RegisterForm.ConfirmePassword"
-              placeholder="Confirm Password"
+              placeholder="请再次输入密码"
               type="password"
               class="input_box"
             />
           </el-form-item>
           <el-form-item>
             <div class="msg">
-              If you have an account? <a href="/login">Sign in</a>
+              如果你有账号，请? <a href="/login">登录</a>
             </div>
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="onSubmit" class="register_btn"
-              >Sign up</el-button
+              >登录</el-button
             >
           </el-form-item>
         </el-form>
@@ -83,7 +83,7 @@ const RegisterForm = ref({
   ConfirmePassword: "",
 });
 const isButtonDisabled = ref(false);
-const buttonLabel = ref("Send Code");
+const buttonLabel = ref("发送验证码");
 
 const startCountDown = () => {
   isButtonDisabled.value = true;
@@ -91,9 +91,9 @@ const startCountDown = () => {
   const updateCountdown = () => {
     if (countdownTime === 0) {
       isButtonDisabled.value = false;
-      buttonLabel.value = "Send Code";
+      buttonLabel.value = "发送验证码";
     } else {
-      buttonLabel.value = `Try again after  ${countdownTime} s`;
+      buttonLabel.value = ` 请在${countdownTime}秒后重试`;
       countdownTime--;
       setTimeout(updateCountdown, 1000);
     }
@@ -186,14 +186,14 @@ span {
   padding-top: 4px;
 }
 .input_code {
-  width: 100px;
+  width: 120px;
   height: 40px;
   font-size: 15px;
   border: none;
   outline: none;
 }
 .code_btn {
-  width: 145px;
+  width: 125px;
   height: 40px;
   margin-left: 5px;
 }

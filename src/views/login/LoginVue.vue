@@ -2,14 +2,14 @@
   <div class="wrapper">
     <div class="container">
       <div class="header">
-        <h1>Login</h1>
+        <h1>登录</h1>
       </div>
       <div class="main">
         <el-form :model="LoginForm" label-width="60px">
           <el-form-item>
             <el-input
               v-model="LoginForm.Username"
-              placeholder="Email"
+              placeholder="请输入账号"
               class="input_box"
             />
             <template #label>
@@ -21,7 +21,7 @@
           <el-form-item>
             <el-input
               v-model="LoginForm.Password"
-              placeholder="Password"
+              placeholder="请输入密码"
               type="password"
               class="input_box"
             />
@@ -33,12 +33,12 @@
           </el-form-item>
           <el-form-item>
             <div class="msg">
-              Don't have an account? <a href="/register">Sign up</a>
+              假若你没有账号,请先进行<a href="/register">注册</a>
             </div>
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="onSubmit" class="login_btn"
-              >Sign in</el-button
+              >登录</el-button
             >
           </el-form-item>
         </el-form>

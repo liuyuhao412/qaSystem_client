@@ -33,7 +33,7 @@
           </el-form-item>
           <el-form-item>
             <div class="msg">
-              假若你没有账号,请先进行<a href="/register">注册</a>
+              假若你没有账号,请先进行<span class="to_register" @click="to_register">注册</span>
             </div>
           </el-form-item>
           <el-form-item>
@@ -98,6 +98,11 @@ const onSubmit = () => {
     }
   });
 };
+const to_register = ()=>{
+  setTimeout(() => {
+        router.push({ path: "/register" });
+      }, 500);
+}
 </script>
 
 <style scoped>
@@ -153,8 +158,12 @@ span {
   font-size: 15px;
   margin: 0 0;
 }
-.msg a {
+.to_register {
   color: rgb(79, 65, 92);
+}
+.to_register:hover{
+  color: rgb(102, 102, 102);
+  cursor: pointer;
 }
 .login_btn {
   width: 160px;

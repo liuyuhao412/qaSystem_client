@@ -27,7 +27,52 @@
         Copyright © 知识问答系统 本系统为毕业设计所做，仅供学习参考
       </div>
     </div> -->
+    <el-dialog
+    v-model="dialogVisiblepwd"
+    title="修改密码"
+    width="30%"
+    :before-close="handleClosePassword"
+  >
+    <el-form
+      :model="passwordForm"
+      label-width="80px"
+      class="demo-ruleForm"
+      status-icon
+    >
+      <el-form-item label="用户" prop="username">
+        <el-input
+          v-model="passwordForm.username"
+          class="dialog_user_input"
+          disabled
+        />
+      </el-form-item>
+      <el-form-item label="密码">
+        <el-input
+          v-model="passwordForm.new_pwd"
+          class="dialog_user_input"
+          type="password"
+        />
+      </el-form-item>
+      <el-form-item label="确认密码">
+        <el-input
+          v-model="passwordForm.confirm_pwd"
+          class="dialog_user_input"
+          type="password"
+        /><span class="dialog_text"
+          >8位以上,包括大小写字母、数字、特殊字符</span
+        >
+      </el-form-item>
+
+      <el-form-item>
+        <el-button class="dialog_btn" type="primary" @click="set_pwd_btn">
+          确认
+        </el-button>
+      </el-form-item>
+    </el-form>
+  </el-dialog>
   </div>
+
+  
 </template>
 
 <script lang="ts" setup>

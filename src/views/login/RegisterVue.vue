@@ -55,7 +55,8 @@
           </el-form-item>
           <el-form-item>
             <div class="msg">
-              如果你有账号，请? <a href="/login">登录</a>
+              如果你有账号，请?
+              <span class="to_login" @click="to_login">登录</span>
             </div>
           </el-form-item>
           <el-form-item>
@@ -103,7 +104,7 @@ const startCountDown = () => {
 
 const sendCode = () => {
   SendCodeApi({ Email: RegisterForm.value.Email }).then((res) => {
-    console.log(res)
+    console.log(res);
     if (res.data.code == "1") {
       ElMessage({
         message: res.data.msg,
@@ -144,6 +145,12 @@ const onSubmit = () => {
       });
     }
   });
+};
+
+const to_login = () => {
+  setTimeout(() => {
+    router.push({ path: "/login" });
+  }, 500);
 };
 </script>
 
@@ -213,6 +220,14 @@ span {
 }
 .msg a {
   color: rgb(79, 65, 92);
+}
+
+.to_login {
+  color: rgb(79, 65, 92);
+}
+.to_login:hover {
+  color: rgb(102, 102, 102);
+  cursor: pointer;
 }
 .register_btn {
   width: 160px;

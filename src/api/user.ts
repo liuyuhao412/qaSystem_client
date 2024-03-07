@@ -23,3 +23,16 @@ export function GetUserHistoryApi(params: object) {
         params,
     })
 }
+
+/* 
+*获取用户登录的时间
+*params：{username }
+*/
+
+export function GetTimeApi(params: object) {
+    return request({
+        url: base.get_time,
+        method: "post",
+        params,
+    })
+}

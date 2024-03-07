@@ -12,12 +12,21 @@
     </div>
     <div class="code_table">
       <el-table :data="codeTableData" style="width: 1000px">
-        <el-table-column type="index" label="序号" :index="IndexMethod" width="80px" />
+        <el-table-column
+          type="index"
+          label="序号"
+          :index="IndexMethod"
+          width="80px"
+        />
         <el-table-column prop="email" label="邮箱" width="200px" />
         <el-table-column prop="code" label="验证码" width="120px" />
         <el-table-column prop="is_valid" label="验证码状态" width="100px" />
         <el-table-column prop="created_time" label="创建时间" width="250px" />
-        <el-table-column prop="expiration_time" label="过期时间" width="250px" />
+        <el-table-column
+          prop="expiration_time"
+          label="过期时间"
+          width="250px"
+        />
       </el-table>
     </div>
     <div class="code_page">
@@ -46,70 +55,88 @@ const pageSize = ref(5);
 const total = ref(1);
 
 const loadTableData = async () => {
-  GetCodeApi({
-    page: currentPage.value,
-    limit: pageSize.value,
-  }).then((res) => {
+  try {
+    const res = await GetCodeApi({
+      page: currentPage.value,
+      limit: pageSize.value,
+    });
     codeTableData.value = res.data.data;
     total.value = res.data.count;
-  });
+  } catch (error) {
+    console.error("Axios request failed:", error);
+  }
 };
 onMounted(loadTableData);
 
 const search_code = async () => {
-  GetCodeApi({
-    page: currentPage.value,
-    limit: pageSize.value,
-    email: code_email.value,
-  }).then((res) => {
+  try {
+    const res = await GetCodeApi({
+      page: currentPage.value,
+      limit: pageSize.value,
+      email: code_email.value,
+    });
     codeTableData.value = res.data.data;
     total.value = res.data.count;
-  });
+  } catch (error) {
+    console.error("Axios request failed:", error);
+  }
 };
 
 const handleSizeChange = async (val: number) => {
   if (code_email.value == "") {
-    GetCodeApi({
-      page: currentPage.value,
-      limit: val,
-    }).then((res) => {
+    try {
+      const res = await GetCodeApi({
+        page: currentPage.value,
+        limit: val,
+      });
       codeTableData.value = res.data.data;
       total.value = res.data.count;
-    });
+    } catch (error) {
+      console.error("Axios request failed:", error);
+    }
   } else {
-    GetCodeApi({
-      page: currentPage.value,
-      limit: val,
-      email: code_email.value,
-    }).then((res) => {
+    try {
+      const res = await GetCodeApi({
+        page: currentPage.value,
+        limit: val,
+        email: code_email.value,
+      });
       codeTableData.value = res.data.data;
       total.value = res.data.count;
-    });
+    } catch (error) {
+      console.error("Axios request failed:", error);
+    }
   }
 };
 
 const handleCurrentChange = async (val: number) => {
   if (code_email.value == "") {
-    GetCodeApi({
-      page: val,
-      limit: pageSize.value,
-    }).then((res) => {
+    try {
+      const res = await GetCodeApi({
+        page: val,
+        limit: pageSize.value,
+      });
       codeTableData.value = res.data.data;
       total.value = res.data.count;
-    });
+    } catch (error) {
+      console.error("Axios request failed:", error);
+    }
   } else {
-    GetCodeApi({
-      page: val,
-      limit: pageSize.value,
-      email: code_email.value,
-    }).then((res) => {
+    try {
+      const res = await GetCodeApi({
+        page: val,
+        limit: pageSize.value,
+        email: code_email.value,
+      });
       codeTableData.value = res.data.data;
       total.value = res.data.count;
-    });
+    } catch (error) {
+      console.error("Axios request failed:", error);
+    }
   }
 };
 
-const IndexMethod = (index : number) => {
+const IndexMethod = (index: number) => {
   const Indexpage = currentPage.value;
   const IndexSize = pageSize.value;
   return index + 1 + (Indexpage - 1) * IndexSize;

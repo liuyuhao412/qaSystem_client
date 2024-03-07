@@ -12,7 +12,12 @@
     </div>
     <div class="history_table">
       <el-table :data="historyTableData" style="width: 1200px" border>
-        <el-table-column type="index" label="序号" :index="IndexMethod" width="80px" />
+        <el-table-column
+          type="index"
+          label="序号"
+          :index="IndexMethod"
+          width="80px"
+        />
         <el-table-column prop="message" label="记录" width="600px" />
         <el-table-column prop="username" label="用户" width="200px" />
         <el-table-column prop="role" label="角色" width="100px" />
@@ -47,76 +52,94 @@ const pageSize = ref(3);
 const total = ref(1);
 
 const loadTableData = async () => {
-  GetUserHistoryApi({
-    page: currentPage.value,
-    limit: pageSize.value,
-    username: username,
-  }).then((res) => {
+  try {
+    const res = await GetUserHistoryApi({
+      page: currentPage.value,
+      limit: pageSize.value,
+      username: username,
+    });
     console.log(res);
     historyTableData.value = res.data.data;
     total.value = res.data.count;
-  });
+  } catch (error) {
+    console.error("Axios request failed:", error);
+  }
 };
 onMounted(loadTableData);
 
 const search_history = async () => {
-  GetUserHistoryApi({
-    page: currentPage.value,
-    limit: pageSize.value,
-    username: username,
-    role: history_role.value,
-  }).then((res) => {
+  try {
+    const res = await GetUserHistoryApi({
+      page: currentPage.value,
+      limit: pageSize.value,
+      username: username,
+      role: history_role.value,
+    });
     historyTableData.value = res.data.data;
     total.value = res.data.count;
-  });
+  } catch (error) {
+    console.error("Axios request failed:", error);
+  }
 };
 
 const handleSizeChange = async (val: number) => {
   if (history_role.value == "") {
-    GetUserHistoryApi({
-      page: currentPage.value,
-      limit: val,
-      username: username,
-    }).then((res) => {
+    try {
+      const res = await GetUserHistoryApi({
+        page: currentPage.value,
+        limit: val,
+        username: username,
+      });
       historyTableData.value = res.data.data;
       total.value = res.data.count;
-    });
+    } catch (error) {
+      console.error("Axios request failed:", error);
+    }
   } else {
-    GetUserHistoryApi({
-      page: currentPage.value,
-      limit: val,
-      username: username,
-      role: history_role.value,
-    }).then((res) => {
+    try {
+      const res = await GetUserHistoryApi({
+        page: currentPage.value,
+        limit: val,
+        username: username,
+        role: history_role.value,
+      });
       historyTableData.value = res.data.data;
       total.value = res.data.count;
-    });
+    } catch (error) {
+      console.error("Axios request failed:", error);
+    }
   }
 };
 
 const handleCurrentChange = async (val: number) => {
   if (history_role.value == "") {
-    GetUserHistoryApi({
-      page: val,
-      limit: pageSize.value,
-      username: username,
-    }).then((res) => {
+    try {
+      const res = await GetUserHistoryApi({
+        page: val,
+        limit: pageSize.value,
+        username: username,
+      });
       historyTableData.value = res.data.data;
       total.value = res.data.count;
-    });
+    } catch (error) {
+      console.error("Axios request failed:", error);
+    }
   } else {
-    GetUserHistoryApi({
-      page: val,
-      limit: pageSize.value,
-      username: username,
-      role: history_role.value,
-    }).then((res) => {
+    try {
+      const res = await GetUserHistoryApi({
+        page: val,
+        limit: pageSize.value,
+        username: username,
+        role: history_role.value,
+      });
       historyTableData.value = res.data.data;
       total.value = res.data.count;
-    });
+    } catch (error) {
+      console.error("Axios request failed:", error);
+    }
   }
 };
-const IndexMethod = (index : number) => {
+const IndexMethod = (index: number) => {
   const Indexpage = currentPage.value;
   const IndexSize = pageSize.value;
   return index + 1 + (Indexpage - 1) * IndexSize;

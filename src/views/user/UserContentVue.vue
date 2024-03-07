@@ -28,51 +28,51 @@
       </div>
     </div> -->
     <el-dialog
-    v-model="dialogVisiblepwd"
-    title="修改密码"
-    width="30%"
-    :before-close="handleClosePassword"
-  >
-    <el-form
-      :model="passwordForm"
-      label-width="80px"
-      class="demo-ruleForm"
-      status-icon
+      v-model="dialogVisiblepwd"
+      title="修改密码"
+      width="30%"
+      :modal="true"
+      :close-on-click-modal="false"
+      :before-close="handleClosePassword"
     >
-      <el-form-item label="用户" prop="username">
-        <el-input
-          v-model="passwordForm.username"
-          class="dialog_user_input"
-          disabled
-        />
-      </el-form-item>
-      <el-form-item label="密码">
-        <el-input
-          v-model="passwordForm.new_pwd"
-          class="dialog_user_input"
-          type="password"
-        />
-      </el-form-item>
-      <el-form-item label="确认密码">
-        <el-input
-          v-model="passwordForm.confirm_pwd"
-          class="dialog_user_input"
-          type="password"
-        /><span class="dialog_text"
-          >8位以上,包括大小写字母、数字、特殊字符</span
-        >
-      </el-form-item>
+      <el-form
+        :model="passwordForm"
+        label-width="80px"
+        class="demo-ruleForm"
+        status-icon
+      >
+        <el-form-item label="用户" prop="username">
+          <el-input
+            v-model="passwordForm.username"
+            class="dialog_user_input"
+            disabled
+          />
+        </el-form-item>
+        <el-form-item label="密码">
+          <el-input
+            v-model="passwordForm.new_pwd"
+            class="dialog_user_input"
+            type="password"
+          />
+        </el-form-item>
+        <el-form-item label="确认密码">
+          <el-input
+            v-model="passwordForm.confirm_pwd"
+            class="dialog_user_input"
+            type="password"
+          /><span class="dialog_text"
+            >8位以上,包括大小写字母、数字、特殊字符</span
+          >
+        </el-form-item>
 
-      <el-form-item>
-        <el-button class="dialog_btn" type="primary" @click="set_pwd_btn">
-          确认
-        </el-button>
-      </el-form-item>
-    </el-form>
-  </el-dialog>
+        <el-form-item>
+          <el-button class="dialog_btn" type="primary" @click="set_pwd_btn">
+            确认
+          </el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
   </div>
-
-  
 </template>
 
 <script lang="ts" setup>
@@ -125,8 +125,9 @@ const updatePassword = () => {
 };
 
 const set_pwd_btn = async () => {
-  UpdatePasswordApi(passwordForm.value).then((res) => {
-    // console.log(res);
+  try {
+    const res = await UpdatePasswordApi(passwordForm.value);
+
     if (res.data.code == 1) {
       ElMessage({
         message: res.data.msg,
@@ -141,23 +142,15 @@ const set_pwd_btn = async () => {
         duration: 1000,
       });
     }
-  });
+  } catch (error) {
+    console.error("Axios request failed:", error);
+  }
 };
 
 const handleClosePassword = (done: () => void) => {
-  ElMessageBox.confirm("您确定要退出修改？", "提示", {
-    cancelButtonText: "取消",
-    confirmButtonText: "确认",
-    type: "warning",
-  })
-    .then(() => {
-      done();
-      passwordForm.value.new_pwd = "";
-      passwordForm.value.confirm_pwd = "";
-    })
-    .catch(() => {
-      // catch error
-    });
+  done();
+  passwordForm.value.new_pwd = "";
+  passwordForm.value.confirm_pwd = "";
 };
 </script>
 

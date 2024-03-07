@@ -60,10 +60,13 @@ const sendMessage = async () => {
   const question = newMessage.value;
   newMessage.value = "";
   chatToBottom();
-  ChatApi({ question: question, username: username }).then((res) => {
+  try {
+    const res = await ChatApi({ question: question, username: username });
     messagesList.value.push({ text: res.data.answer, role: "system" });
     chatToBottom();
-  });
+  } catch (error) {
+    console.error("Axios request failed:", error);
+  }
 };
 
 const sendMessageOnEnter = () => {

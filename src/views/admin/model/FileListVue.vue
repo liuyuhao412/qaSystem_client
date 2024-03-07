@@ -25,7 +25,12 @@
     </div>
     <div class="file_table">
       <el-table :data="fileTableData" style="width: 700px">
-        <el-table-column type="index" label="序号" :index="IndexMethod" width="100px" />
+        <el-table-column
+          type="index"
+          label="序号"
+          :index="IndexMethod"
+          width="100px"
+        />
         <el-table-column prop="name" label="文件名" width="500px" />
         <el-table-column label="操作" width="100px">
           <template #default="scope">
@@ -56,6 +61,8 @@
       v-model="dialogVisiblefile"
       title="上传文件"
       width="700px"
+      :modal="true"
+      :close-on-click-modal="false"
       :before-close="handleCloseFile"
     >
       <el-form
@@ -163,19 +170,23 @@ const fileForm = ref({
 const upload = ref<UploadInstance>();
 
 const SelectKb = async () => {
-  SelectKbApi({}).then((res) => {
+  try {
+    const res = await SelectKbApi({});
     options.value = res.data.data;
-  });
+  } catch (error) {
+    console.error("Axios request failed:", error);
+  }
 };
 
 onMounted(SelectKb);
 
-const search_file = () => {
-  GetFileListApi({
-    page: currentPage.value,
-    limit: pageSize.value,
-    kb_name: kb_name.value,
-  }).then((res) => {
+const search_file = async () => {
+  try {
+    const res = await GetFileListApi({
+      page: currentPage.value,
+      limit: pageSize.value,
+      kb_name: kb_name.value,
+    });
     if (res.data.code == "200") {
       ElMessage({
         message: res.data.msg,
@@ -191,7 +202,9 @@ const search_file = () => {
         duration: 1000,
       });
     }
-  });
+  } catch (error) {
+    console.error("Axios request failed:", error);
+  }
 };
 
 const add_btn = () => {
@@ -219,11 +232,12 @@ const handleSuccess = (res: { file: string; msg: string }) => {
   });
 };
 
-const uploadFilesBtn = () => {
+const uploadFilesBtn = async () => {
   dialogVisiblefile.value = false;
   fileForm.value.kb_name = kb_name.value;
-  UploadApi(fileForm.value).then((res) => {
-    if (res.data.code == "200") {
+  try {
+    const res = await UploadApi(fileForm.value);
+    if (res.data.code == "1") {
       ElMessage({
         message: res.data.msg,
         type: "success",
@@ -241,25 +255,17 @@ const uploadFilesBtn = () => {
         duration: 1000,
       });
     }
-  });
+  } catch (error) {
+    console.error("Axios request failed:", error);
+  }
 };
 
 const handleCloseFile = (done: () => void) => {
-  ElMessageBox.confirm("您确定要退出编辑？", "提示", {    
-    cancelButtonText: "取消",
-    confirmButtonText: "确认",
-    type: "warning",
-  })
-    .then(() => {
-      done();
-      fileForm.value.chunk_size_max_length = 250;
-      fileForm.value.chunk_overlap_length = 50;
-      fileForm.value.zh_title_enhance = false;
-      fileForm.value.file = "";
-    })
-    .catch(() => {
-      // catch error
-    });
+  done();
+  fileForm.value.chunk_size_max_length = 250;
+  fileForm.value.chunk_overlap_length = 50;
+  fileForm.value.zh_title_enhance = false;
+  fileForm.value.file = "";
 };
 
 const handleDelete = (index: number, row: any) => {
@@ -268,26 +274,30 @@ const handleDelete = (index: number, row: any) => {
     confirmButtonText: "确认",
     type: "warning",
   })
-    .then(() => {
-      DeleteDocApi({ kb_name: kb_name.value, filename: row.name }).then(
-        (res) => {
-          if (res.data.code == "200") {
-            ElMessage({
-              type: "success",
-              message: res.data.msg,
-              duration: 1000,
-            });
-            GetFileListApi({
-              page: currentPage.value,
-              limit: pageSize.value,
-              kb_name: kb_name.value,
-            }).then((res) => {
-              fileTableData.value = res.data.data;
-              total.value = res.data.count;
-            });
-          }
+    .then(async () => {
+      try {
+        const res = await DeleteDocApi({
+          kb_name: kb_name.value,
+          filename: row.name,
+        });
+        if (res.data.code == "200") {
+          ElMessage({
+            type: "success",
+            message: res.data.msg,
+            duration: 1000,
+          });
+          GetFileListApi({
+            page: currentPage.value,
+            limit: pageSize.value,
+            kb_name: kb_name.value,
+          }).then((res) => {
+            fileTableData.value = res.data.data;
+            total.value = res.data.count;
+          });
         }
-      );
+      } catch (error) {
+        console.error("Axios request failed:", error);
+      }
     })
     .catch(() => {
       ElMessage({
@@ -298,28 +308,34 @@ const handleDelete = (index: number, row: any) => {
 };
 
 const handleSizeChange = async (val: number) => {
-  GetFileListApi({
-    page: currentPage.value,
-    limit: val,
-    kb_name: kb_name.value,
-  }).then((res) => {
+  try {
+    const res = await GetFileListApi({
+      page: currentPage.value,
+      limit: val,
+      kb_name: kb_name.value,
+    });
     fileTableData.value = res.data.data;
     total.value = res.data.count;
-  });
+  } catch (error) {
+    console.error("Axios request failed:", error);
+  }
 };
 
 const handleCurrentChange = async (val: number) => {
-  GetFileListApi({
-    page: val,
-    limit: pageSize.value,
-    kb_name: kb_name.value,
-  }).then((res) => {
+  try {
+    const res = await GetFileListApi({
+      page: val,
+      limit: pageSize.value,
+      kb_name: kb_name.value,
+    });
     fileTableData.value = res.data.data;
     total.value = res.data.count;
-  });
+  } catch (error) {
+    console.error("Axios request failed:", error);
+  }
 };
 
-const IndexMethod = (index : number) => {
+const IndexMethod = (index: number) => {
   const Indexpage = currentPage.value;
   const IndexSize = pageSize.value;
   return index + 1 + (Indexpage - 1) * IndexSize;

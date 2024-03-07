@@ -19,7 +19,7 @@
       </div>
       <div class="text">{{ username }}</div>
     </div>
-    
+
     <div>
       <router-view></router-view>
     </div>
@@ -32,6 +32,8 @@
       v-model="dialogVisiblepwd"
       title="修改密码"
       width="30%"
+      :modal="true"
+      :close-on-click-modal="false"
       :before-close="handleClosePassword"
     >
       <el-form
@@ -77,7 +79,7 @@
 <script lang="ts" setup>
 import { useRouter } from "vue-router";
 import { ElMessage, ElMessageBox } from "element-plus";
-import { ArrowDown } from '@element-plus/icons-vue'
+import { ArrowDown } from "@element-plus/icons-vue";
 import { UpdatePasswordApi } from "@/api/admin";
 import { ref } from "vue";
 
@@ -104,6 +106,8 @@ const exit = () => {
       });
       localStorage.removeItem("token");
       localStorage.removeItem("username");
+      localStorage.removeItem("role");
+
       setTimeout(() => {
         router.push({ path: "/login" });
       }, 1000);
@@ -125,8 +129,9 @@ const updatePassword = () => {
 };
 
 const set_pwd_btn = async () => {
-  UpdatePasswordApi(passwordForm.value).then((res) => {
-    // console.log(res);
+  try {
+    const res = await UpdatePasswordApi(passwordForm.value);
+
     if (res.data.code == 1) {
       ElMessage({
         message: res.data.msg,
@@ -141,23 +146,15 @@ const set_pwd_btn = async () => {
         duration: 1000,
       });
     }
-  });
+  } catch (error) {
+    console.error("Axios request failed:", error);
+  }
 };
 
 const handleClosePassword = (done: () => void) => {
-  ElMessageBox.confirm("您确定要退出修改？", "提示", {
-    cancelButtonText: "取消",
-    confirmButtonText: "确认",
-    type: "warning",
-  })
-    .then(() => {
-      done();
-      passwordForm.value.new_pwd = "";
-      passwordForm.value.confirm_pwd = "";
-    })
-    .catch(() => {
-      // catch error
-    });
+  done();
+  passwordForm.value.new_pwd = "";
+  passwordForm.value.confirm_pwd = "";
 };
 </script>
 

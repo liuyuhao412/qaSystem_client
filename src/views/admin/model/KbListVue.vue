@@ -10,7 +10,12 @@
     </div>
     <div class="kb_table">
       <el-table :data="kbTableData" style="width: 400px">
-        <el-table-column type="index" label="序号" :index="IndexMethod" width="100px" />
+        <el-table-column
+          type="index"
+          label="序号"
+          :index="IndexMethod"
+          width="100px"
+        />
         <el-table-column prop="name" label="知识库名" width="200px" />
         <el-table-column label="操作" width="100px">
           <template #default="scope">
@@ -49,22 +54,25 @@ const pageSize = ref(10);
 const total = ref(0);
 
 const getKbList = async () => {
-  GetKbListApi({
-    page: currentPage.value,
-    limit: pageSize.value,
-  }).then((res) => {
+  try {
+    const res = await GetKbListApi({
+      page: currentPage.value,
+      limit: pageSize.value,
+    });
     kbTableData.value = res.data.data;
     total.value = res.data.count;
-  });
+  } catch (error) {
+    console.error("Axios request failed:", error);
+  }
 };
 
 onMounted(getKbList);
 
 const add_kb = async () => {
-  AddKbApi({
-    kb_name: kb_name.value,
-  }).then((res) => {
-    console.log(res);
+  try {
+    const res = await AddKbApi({
+      kb_name: kb_name.value,
+    });
     if (res.data.code == "200") {
       ElMessage({
         message: res.data.msg,
@@ -80,18 +88,20 @@ const add_kb = async () => {
         duration: 1000,
       });
     }
-  });
+  } catch (error) {
+    console.error("Axios request failed:", error);
+  }
 };
 
 const handleDelete = async (index: number, row: any) => {
-  console.log(row)
   ElMessageBox.confirm("此操作是永久删除,是否删除该知识库？", "提示", {
     cancelButtonText: "取消",
     confirmButtonText: "确认",
     type: "warning",
   })
-    .then(() => {
-      DeleteKbApi({ kb_name: row.name }).then((res) => {
+    .then(async () => {
+      try {
+        const res = await DeleteKbApi({ kb_name: row.name });
         if (res.data.code == "200") {
           ElMessage({
             type: "success",
@@ -100,7 +110,9 @@ const handleDelete = async (index: number, row: any) => {
           });
           getKbList();
         }
-      });
+      } catch (error) {
+        console.error("Axios request failed:", error);
+      }
     })
     .catch(() => {
       ElMessage({
@@ -111,17 +123,20 @@ const handleDelete = async (index: number, row: any) => {
 };
 
 const handleCurrentChange = async (val: number) => {
-  GetKbListApi({
-    page: val,
-    limit: pageSize.value,
-  }).then((res) => {
-    console.log(res);
+  try {
+    const res = await GetKbListApi({
+      page: val,
+      limit: pageSize.value,
+    });
+
     kbTableData.value = res.data.data;
     total.value = res.data.count;
-  });
+  } catch (error) {
+    console.error("Axios request failed:", error);
+  }
 };
 
-const IndexMethod = (index : number) => {
+const IndexMethod = (index: number) => {
   const Indexpage = currentPage.value;
   const IndexSize = pageSize.value;
   return index + 1 + (Indexpage - 1) * IndexSize;

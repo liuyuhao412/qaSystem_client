@@ -188,24 +188,28 @@ const init_chart_login = () => {
   }
 };
 
-const get_user_cout = () => {
-  GetUserCountApi().then((res) => {
-    userTotal.value = res.data.count;
-  });
-  GetUserLogApi().then((res) => {
-    logTotal.value = res.data.count;
-  });
+const get_user_cout = async () => {
+  try {
+    const res_get_user_count = await GetUserCountApi();
+    userTotal.value = res_get_user_count.data.count;
+    const res_get_user_log = await GetUserLogApi();
+    logTotal.value = res_get_user_log.data.count;
+  } catch (error) {
+    console.error("Axios request failed:", error);
+  }
 };
 
-const get_register_list = () => {
-  GetRegisterListApi().then((res) => {
-    userCountList.value = res.data.user_list;
+const get_register_list = async () => {
+  try {
+    const res_get_register_list = await GetRegisterListApi();
+    userCountList.value = res_get_register_list.data.user_list;
     init_chart_user();
-  });
-  GetLoginListApi().then((res) => {
-    logCountList.value = res.data.user_list;
+    const res_get_login_list = await GetLoginListApi();
+    logCountList.value = res_get_login_list.data.user_list;
     init_chart_login();
-  });
+  } catch (error) {
+    console.error("Axios request failed:", error);
+  }
 };
 
 onMounted(get_user_cout);

@@ -74,31 +74,37 @@ const default_score_Temperature = ref(0.7);
 const kb_name = ref<string>("Olympics");
 const options = ref([{ id: 0, name: "无" }]);
 
-const get_config = async()=>{
-  GetConfigApi({}).then((res)=>{
+const get_config = async () => {
+  try {
+    const res = await GetConfigApi({});
     kb_name.value = res.data.data.kb_name;
     top_k.value = res.data.data.top_k;
     default_score_threshold.value = res.data.data.score_threshold;
     default_score_Temperature.value = res.data.data.score_Temperature;
-
-  })
-}
+  } catch (error) {
+    console.error("Axios request failed:", error);
+  }
+};
 
 const SelectKb = async () => {
-  SelectKbApi({}).then((res) => {
+  try {
+    const res = await SelectKbApi({});
     options.value = res.data.data;
-  });
+  } catch (error) {
+    console.error("Axios request failed:", error);
+  }
 };
 onMounted(get_config);
 onMounted(SelectKb);
 
-const save = () => {
-  SaveConfigApi({
-    top_k: top_k.value,
-    default_score_threshold: default_score_threshold.value,
-    default_score_Temperature: default_score_Temperature.value,
-    kb_name: kb_name.value,
-  }).then((res) => {
+const save = async () => {
+  try {
+    const res = await SaveConfigApi({
+      top_k: top_k.value,
+      default_score_threshold: default_score_threshold.value,
+      default_score_Temperature: default_score_Temperature.value,
+      kb_name: kb_name.value,
+    });
     if (res.data.code == "1") {
       ElMessage({
         message: "保存成功",
@@ -106,20 +112,23 @@ const save = () => {
         duration: 1000,
       });
     }
-  });
+  } catch (error) {
+    console.error("Axios request failed:", error);
+  }
 };
 
-const reset = () => {
+const reset = async () => {
   top_k.value = 3;
   default_score_threshold.value = 1.0;
   default_score_Temperature.value = 0.7;
-  kb_name.value = 'Olympics'
-  SaveConfigApi({
-    top_k: top_k.value,
-    default_score_threshold: default_score_threshold.value,
-    default_score_Temperature: default_score_Temperature.value,
-    kb_name: kb_name.value,
-  }).then((res) => {
+  kb_name.value = "Olympics";
+  try {
+    const res = await SaveConfigApi({
+      top_k: top_k.value,
+      default_score_threshold: default_score_threshold.value,
+      default_score_Temperature: default_score_Temperature.value,
+      kb_name: kb_name.value,
+    });
     if (res.data.code == "1") {
       ElMessage({
         message: "重置成功",
@@ -127,7 +136,9 @@ const reset = () => {
         duration: 1000,
       });
     }
-  });
+  } catch (error) {
+    console.error("Axios request failed:", error);
+  }
 };
 </script>
 

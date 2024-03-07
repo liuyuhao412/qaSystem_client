@@ -19,7 +19,7 @@
       >
     </div>
     <div class="user_table">
-      <el-table :data="userTableData" style="width: 1050px" >
+      <el-table :data="userTableData" style="width: 1050px">
         <el-table-column
           type="index"
           label="序号"
@@ -68,6 +68,8 @@
       v-model="dialogVisibleAdd"
       title="添加用户"
       width="30%"
+      :modal="true"
+      :close-on-click-modal="false"
       :before-close="handleCloseAdd"
     >
       <el-form
@@ -100,6 +102,8 @@
       v-model="dialogVisibleUpdate"
       title="编辑用户"
       width="30%"
+      :modal="true"
+      :close-on-click-modal="false"
       :before-close="handleCloseUpdate"
     >
       <el-form
@@ -171,27 +175,33 @@ const updateUserForm = ref({
 });
 
 const loadTableData = async () => {
-  GetUserApi({
-    page: currentPage.value,
-    limit: pageSize.value,
-  }).then((res) => {
+  try {
+    const res = await GetUserApi({
+      page: currentPage.value,
+      limit: pageSize.value,
+    });
     userTableData.value = res.data.data;
     total.value = res.data.count;
-  });
+  } catch (error) {
+    console.error("Axios request failed:", error);
+  }
 };
 
 onMounted(loadTableData);
 
 const search_user = async () => {
-  GetUserApi({
-    page: currentPage.value,
-    limit: pageSize.value,
-    username: input_username.value,
-    role: input_role.value,
-  }).then((res) => {
+  try {
+    const res = await GetUserApi({
+      page: currentPage.value,
+      limit: pageSize.value,
+      username: input_username.value,
+      role: input_role.value,
+    });
     userTableData.value = res.data.data;
     total.value = res.data.count;
-  });
+  } catch (error) {
+    console.error("Axios request failed:", error);
+  }
 };
 
 const add_user = () => {
@@ -199,9 +209,8 @@ const add_user = () => {
 };
 
 const add_user_btn = async () => {
-  console.log(addUserForm.value);
-  AddUserApi(addUserForm.value).then((res) => {
-    // console.log(res);
+  try {
+    const res = await AddUserApi(addUserForm.value);
     if (res.data.code == 1) {
       ElMessage({
         message: res.data.msg,
@@ -220,24 +229,16 @@ const add_user_btn = async () => {
         duration: 1000,
       });
     }
-  });
+  } catch (error) {
+    console.error("Axios request failed:", error);
+  }
 };
 
 const handleCloseAdd = (done: () => void) => {
-  ElMessageBox.confirm("您确定要退出编辑？", "提示", {
-    cancelButtonText: "取消",
-    confirmButtonText: "确认",
-    type: "warning",
-  })
-    .then(() => {
-      done();
-      addUserForm.value.username = "";
-      addUserForm.value.email = "";
-      addUserForm.value.role = "";
-    })
-    .catch(() => {
-      // catch error
-    });
+  done();
+  addUserForm.value.username = "";
+  addUserForm.value.email = "";
+  addUserForm.value.role = "";
 };
 
 const handleEdit = (index: number, row: any) => {
@@ -248,8 +249,8 @@ const handleEdit = (index: number, row: any) => {
 };
 
 const update_user_btn = async () => {
-  UpdateUserApi(updateUserForm.value).then((res) => {
-    // console.log(res);
+  try {
+    const res = await UpdateUserApi(updateUserForm.value);
     if (res.data.code == 1) {
       ElMessage({
         message: res.data.msg,
@@ -257,9 +258,22 @@ const update_user_btn = async () => {
         duration: 1000,
       });
       dialogVisibleUpdate.value = false;
+
       const newUser: string | null = updateUserForm.value.username;
-      localStorage.setItem("username", newUser);
-      location.reload();
+      const localUser: string | null = localStorage.getItem("username");
+      const newRole: string | null = updateUserForm.value.role;
+      const localRole: string | null = localStorage.getItem("role");
+      if (localUser != newUser) {
+        localStorage.setItem("username", newUser);
+        location.reload();
+      }
+
+      // if (localRole != newRole) {
+      //   localStorage.removeItem("token");
+      //   localStorage.removeItem("username");
+      //   localStorage.removeItem("role");
+      //   location.reload();
+      // }
       loadTableData();
     } else {
       ElMessage({
@@ -268,21 +282,13 @@ const update_user_btn = async () => {
         duration: 1000,
       });
     }
-  });
+  } catch (error) {
+    console.error("Axios request failed:", error);
+  }
 };
 
 const handleCloseUpdate = (done: () => void) => {
-  ElMessageBox.confirm("您确定要退出编辑？", "提示", {
-    cancelButtonText: "取消",
-    confirmButtonText: "确认",
-    type: "warning",
-  })
-    .then(() => {
-      done();
-    })
-    .catch(() => {
-      // catch error
-    });
+  done();
 };
 
 const setPassword = (index: number, row: any) => {
@@ -291,8 +297,9 @@ const setPassword = (index: number, row: any) => {
     confirmButtonText: "确认",
     type: "warning",
   })
-    .then(() => {
-      SetPasswordApi({ email: toRaw(row).email }).then((res) => {
+    .then(async () => {
+      try {
+        const res = await SetPasswordApi({ email: toRaw(row).email });
         if (res.data.code === 1) {
           ElMessage({
             type: "success",
@@ -301,7 +308,9 @@ const setPassword = (index: number, row: any) => {
           });
         }
         loadTableData();
-      });
+      } catch (error) {
+        console.error("Axios request failed:", error);
+      }
     })
     .catch(() => {
       ElMessage({
@@ -312,14 +321,14 @@ const setPassword = (index: number, row: any) => {
 };
 
 const handleDelete = (index: number, row: any) => {
-  // console.log(index, toRaw(row).num);
   ElMessageBox.confirm("此操作是永久删除,是否删除该用户？", "提示", {
     cancelButtonText: "取消",
     confirmButtonText: "确认",
     type: "warning",
   })
-    .then(() => {
-      DeleteUserApi({ email: toRaw(row).email }).then((res) => {
+    .then(async () => {
+      try {
+        const res = await DeleteUserApi({ email: toRaw(row).email });
         if (res.data.code === 1) {
           ElMessage({
             type: "success",
@@ -330,10 +339,13 @@ const handleDelete = (index: number, row: any) => {
           if (newUser == toRaw(row).username) {
             localStorage.removeItem("username");
             localStorage.removeItem("token");
+            localStorage.removeItem("role");
           }
           location.reload();
         }
-      });
+      } catch (error) {
+        console.error("Axios request failed:", error);
+      }
     })
     .catch(() => {
       ElMessage({
@@ -345,49 +357,61 @@ const handleDelete = (index: number, row: any) => {
 
 const handleSizeChange = async (val: number) => {
   if (input_username.value == "" && input_role.value == "") {
-    GetUserApi({
-      page: currentPage.value,
-      limit: val,
-    }).then((res) => {
+    try {
+      const res = await GetUserApi({
+        page: currentPage.value,
+        limit: val,
+      });
       userTableData.value = res.data.data;
       total.value = res.data.count;
-    });
+    } catch (error) {
+      console.error("Axios request failed:", error);
+    }
   } else {
-    GetUserApi({
-      page: currentPage.value,
-      limit: val,
-      username: input_username.value,
-      role: input_role.value,
-    }).then((res) => {
+    try {
+      const res = await GetUserApi({
+        page: currentPage.value,
+        limit: val,
+        username: input_username.value,
+        role: input_role.value,
+      });
       userTableData.value = res.data.data;
       total.value = res.data.count;
-    });
+    } catch (error) {
+      console.error("Axios request failed:", error);
+    }
   }
 };
 
 const handleCurrentChange = async (val: number) => {
   if (input_username.value == "" && input_role.value == "") {
-    GetUserApi({
-      page: val,
-      limit: pageSize.value,
-    }).then((res) => {
+    try {
+      const res = await GetUserApi({
+        page: val,
+        limit: pageSize.value,
+      });
       userTableData.value = res.data.data;
       total.value = res.data.count;
-    });
+    } catch (error) {
+      console.error("Axios request failed:", error);
+    }
   } else {
-    GetUserApi({
-      page: val,
-      limit: pageSize.value,
-      username: input_username.value,
-      role: input_role.value,
-    }).then((res) => {
+    try {
+      const res = await GetUserApi({
+        page: val,
+        limit: pageSize.value,
+        username: input_username.value,
+        role: input_role.value,
+      });
       userTableData.value = res.data.data;
       total.value = res.data.count;
-    });
+    } catch (error) {
+      console.error("Axios request failed:", error);
+    }
   }
 };
 
-const IndexMethod = (index : number) => {
+const IndexMethod = (index: number) => {
   const Indexpage = currentPage.value;
   const IndexSize = pageSize.value;
   return index + 1 + (Indexpage - 1) * IndexSize;

@@ -102,9 +102,9 @@ const startCountDown = () => {
   updateCountdown();
 };
 
-const sendCode = () => {
-  SendCodeApi({ Email: RegisterForm.value.Email }).then((res) => {
-    console.log(res);
+const sendCode = async () => {
+  try {
+    const res = await SendCodeApi({ Email: RegisterForm.value.Email });
     if (res.data.code == "1") {
       ElMessage({
         message: res.data.msg,
@@ -120,12 +120,14 @@ const sendCode = () => {
         duration: 1000,
       });
     }
-  });
+  } catch (error) {
+    console.error("Axios request failed:", error);
+  }
 };
 
-const onSubmit = () => {
-  console.log(RegisterForm);
-  RegisterApi(RegisterForm.value).then((res) => {
+const onSubmit = async () => {
+  try {
+    const res = await RegisterApi(RegisterForm.value);
     if (res.data.code == "1") {
       ElMessage({
         message: res.data.msg,
@@ -144,7 +146,9 @@ const onSubmit = () => {
         duration: 2000,
       });
     }
-  });
+  } catch (error) {
+    console.error("Axios request failed:", error);
+  }
 };
 
 const to_login = () => {

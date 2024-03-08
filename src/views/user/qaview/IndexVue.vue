@@ -9,8 +9,8 @@
         <span v-if="message.role === 'user'" class="iconfont user_icon"
           >&#xe625;</span
         >
-        <span v-html="message.text"></span>
-        <span v-if="message.role === 'system'" class="iconfont system_icon"
+        <span v-html="message.content"></span>
+        <span v-if="message.role === 'assistant'" class="iconfont system_icon"
           >&#xe61a;</span
         >
       </div>
@@ -31,12 +31,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, nextTick } from "vue";
+import { ref, onMounted, toRaw } from "vue";
 import { ChatApi } from "@/api/user";
 
 interface Message {
-  text: string;
   role: string;
+  content: string;
 }
 
 const messagesList = ref<Message[]>([]);
@@ -56,13 +56,18 @@ onMounted(() => {
 
 const sendMessage = async () => {
   if (newMessage.value.trim() === "") return;
-  messagesList.value.push({ text: newMessage.value, role: "user" });
+  messagesList.value.push({ role: "user", content: newMessage.value });
   const question = newMessage.value;
   newMessage.value = "";
   chatToBottom();
   try {
-    const res = await ChatApi({ question: question, username: username });
-    messagesList.value.push({ text: res.data.answer, role: "system" });
+    const list = JSON.stringify(toRaw(messagesList.value));
+    const res = await ChatApi({
+      question: question,
+      username: username,
+      list: list,
+    });
+    messagesList.value.push({ role: "assistant", content: res.data.answer });
     chatToBottom();
   } catch (error) {
     console.error("Axios request failed:", error);

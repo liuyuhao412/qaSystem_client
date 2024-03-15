@@ -248,6 +248,15 @@ const uploadFilesBtn = async () => {
       fileForm.value.zh_title_enhance = false;
       fileForm.value.file = "";
       dialogVisiblefile.value = false;
+      const res1 = await GetFileListApi({
+        page: currentPage.value,
+        limit: pageSize.value,
+        kb_name: kb_name.value,
+      });
+      if (res1.data.code == "200") {
+        fileTableData.value = res1.data.data;
+        total.value = res1.data.count;
+      }
     } else {
       ElMessage({
         message: res.data.msg,

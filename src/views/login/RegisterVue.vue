@@ -61,7 +61,7 @@
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="onSubmit" class="register_btn"
-              >登录</el-button
+              >注册</el-button
             >
           </el-form-item>
         </el-form>

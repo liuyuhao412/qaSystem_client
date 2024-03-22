@@ -2,7 +2,7 @@
   <div class="wrapper">
     <div class="container">
       <div class="header">
-        <h1>Register</h1>
+        <h1>注册</h1>
       </div>
       <div class="main">
         <el-form :model="RegisterForm" label-width="60px">

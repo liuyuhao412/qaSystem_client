@@ -192,4 +192,11 @@ const handleClosePassword = (done: () => void) => {
 .bottom_text {
   font-size: 15px;
 }
+.dialog_user_input {
+  width: 260px;
+}
+.dialog_btn {
+  width: 150px;
+  margin-left: 10px;
+}
 </style>

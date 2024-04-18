@@ -11,9 +11,9 @@ const base = {
     get_user: "/admin_user/get_user",//获取用户列表
     add_user: "/admin_user/add_user",//添加用户
     update_user: "/admin_user/update_user",//编辑用户
-    delete_user: "/admin_user/delete_user",//编辑用户
+    delete_user: "/admin_user/delete_user",//删除用户
     set_password: "/admin_user/set_password",//重置密码
-    update_password: "/admin_user/update_password",//重置密码
+    update_password: "/admin_user/update_password",//修改密码
     get_kb_list: "/admin_model/get_kb_list",//获取知识库列表
     add_kb: "/admin_model/add_kb",//创建知识库
     delete_kb: "/admin_model/delete_kb",//删除知识库

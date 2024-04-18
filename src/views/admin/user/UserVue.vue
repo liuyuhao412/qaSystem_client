@@ -122,7 +122,6 @@
             <el-input
               v-model="updateUserForm.email"
               class="dialog_user_input"
-              disabled
             />
           </el-form-item>
           <el-form-item prop="role">
@@ -169,6 +168,7 @@
     role: "",
   });
   const updateUserForm = ref({
+    id:"",
     username: "",
     email: "",
     role: "",
